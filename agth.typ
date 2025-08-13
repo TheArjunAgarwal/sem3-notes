@@ -157,12 +157,23 @@ There is no pure Nash equilibrium here. But allowing randomized strategy, we can
   - $p_i$ could be one (in case of a pure strategy).
 ]
 
+
 #definition(title : "Mixed Strategy Profile")[
   A mixed strategy profile is a tuple $(p_1, p_2, dots, p_n)$ where each $p_i$ is a mixed strategy for player $i$. It represents the joint behavior of all players where each one plays a randomized strategy independently.
 ]
 
+#definition(title : "Expected Payoff")[
+  The expected payoff for player $i$ is:
+  $
+  sum_((s_1, dots, s_n) in S_1 times dots times S_n) mu_i (s_i, s_(-i)) product_(a = 1)^n p_a (s_a)
+  $
+]
+
 #definition(title:"Mixed Strategy Nash Equilibrium")[
-  A mixed strategy profile $(p^*_1, p^*_2, dots, p^*_n)$ is a mixed strategy NE if for each player $i$, $p^*_i$ is a BR to $p^*_(-i)$.
+  A mixed strategy profile $(p^*_1, p^*_2, dots, p^*_n)$ is a mixed strategy NE (MSNE) if for each player $i$, $p^*_i$ is a BR to $p^*_(-i)$. That is:
+  $
+  mu_i (p^*_i, p^*_(-i)) >= mu_i (sigma_i, sigma_(-i)^*) forall sigma_i in "probability distribution over" S_i
+  $
 ]
 
 #thm(title:"Nash's Theorem")[
@@ -192,9 +203,82 @@ In first price auction, $t_i = b_i$.
   Buyer who gets the items (say $i$) pays the second highest bid
   ]
 
-#proof[
+#thm[
   Second price auction is weakly revealing (that is it is a weakly dominant strategy to bid truthfully).
 ]
 #proof[
   We will analyze for $v_i$ and then see that the same holds with small changes.
 ]
+
+== Battle of the Sexes
+#definition[
+  We represent a situtation where two agents must simultaniously take an action where each of them prefers one option over the other but prefer coordination over doing different things. And example occurrence would be #footnote[Which is extremely stereotypical and doesn't reprasent the author and hopefully the prof's views.]:
+
+  #nfg(
+    players: ("Husband", "Wife"),
+    s1 : ("Cricket", "Music"),
+    s2 : ("Cricket", "Music"),
+    [2,1],[0,0],
+    [0,0], [1,2]
+  )
+]
+We can try to brute force this. Let's look at the payoffs for both the players
+$
+mu_1(sigma_1, sigma_2) =& sigma_1(C) sigma_2(C) mu_i (C,C) + \
+  &sigma_1(C) sigma_2(D) mu_i (C,D) + \
+  &sigma_1(D) sigma_2(C) mu_i (D,C) + \
+  &sigma_1(D) sigma_2(D) mu_i (D,D)\
+  &=2 sigma_1 (C) sigma_2 (C) + sigma_1 (D) sigma_2 (D)\
+  &= 2 sigma_1 (C) sigma_2 (C) + (1 - sigma_1 (C)) (1 - sigma_2 (C))\
+  &= 3 sigma_1 (C) sigma_2 (C) - sigma_1 (C) - sigma_2 (C) + 1
+$
+And similarly
+$
+mu_2 = 3 sigma_1 (C) sigma_2 (C) - 2 sigma_1 (C) - 2 sigma_2 (C) + 2
+$
+
+Using $mu_1 (sigma^*_1, sigma^*_2) >= mu_1 (sigma_1, sigma_2*) forall sigma_1 in Delta(S_1)$
+$
+ sigma^*_1 (C) [3 sigma_2 (C) - 1] >= sigma_1(1) [3 sigma_2 (C) - 1] forall sigma_1 (c) in (0,1)
+$
+Similarly
+$
+ sigma^*_2 (C) [3 sigma_1 (C) - 2] >= sigma_2(1) [3 sigma_1 (C) - 2] forall sigma_2 (c) in (0,1)
+$
+If $3 sigma^*_2(C) - 1 > 0 => angle.l (1,0), (0,1) angle.r$.
+
+If $3 sigma^*_2(C) - 1 < 0 => angle.l (0,1), (1,0) angle.r$.
+
+If $3 sigma^*_2(C) - 1 = 0 => angle.l (2/3,1/3), (1/3,2/3) angle.r$.
+
+== Properties of MSNE
+Expected payoff for player $i$ will be:
+$
+mu_i (p_1, p_2, dots, p_n) &= sum_((s_1, dots, s_n) in S_1 times dots times S_n) mu_i (s_i, s_(-i)) product_(a = 1)^n p_a (s_a)\
+&= sum_(s_i in S_i) sum_(s_(-i) in S_(-i)) p_i (s_i) p_(-i)(s_(-i)) mu_i (s_i, s_(-i))\
+&=  sum_(s_i in S_i) p_i (s_i) sum_(s_(-i) in S_(-i)) p_(-i)(s_(-i)) mu_i (s_i, s_(-i))\
+&=  sum_(s_i in S_i) p_i (s_i) mu_i (s_i, p_(-i) ) \
+$
+This makes the utility of a player a convex combination of thier pure stratergy payoffs.
+
+#definition(title : "Convex Combination")[
+  A convex combination of $a_1, a_2, dots, a_n$ is $sum_(i=1)^n lambda_i a_i$ where $lambda_i in [0,1]$ and $sum_(i=1)^n lambda_i  = 1$.
+]
+
+An obvious observation is that convex combination of $a_1, dots, a_n <= max {a_i}$.
+
+Which implies that the payoff with mixed stratergy is less than equal to max payoff with a pure strategy $s_i$. This implies:
+$
+max_(sigma_i in Delta(S_i)) mu_i (sigma_i, sigma_(-i)) = max_(s_i in S_i) mu_i (s_i, sigma_(-i))
+$
+#thm[
+  $(sigma^*_1, dots, sigma^*_n)$ is a MSNE if and only if $forall i in N$
+  + $mu_i (s_i, sigma^*_(-i))$ is the same for all $s_i in $ support of $sigma^*_i$.
+  + $mu_i (s_i, sigma^*_(-i)) >= mu_i (s^*_i, sigma^*_(-i)) forall s'_i in.not $ support of $sigma^*_i, s_i in $ support of $sigma^*_i$. 
+]
+
+#remark(title: "Implications")[
+Each player gets the same payoff for any pure stratergy in the support of the MSNE stratergy.
+]
+
+
