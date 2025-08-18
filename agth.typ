@@ -278,7 +278,7 @@ $
 ]
 
 #remark(title: "Implications")[
-Each player gets the same payoff for any pure stratergy in the support of the MSNE stratergy.
+Each player gets the same payoff for any pure stratergy in the support of the MSNE strategy.
 ]
 
 
