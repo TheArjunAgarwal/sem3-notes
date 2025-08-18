@@ -560,3 +560,101 @@ The idea is to add a new initial (as well as final) state and then link it to al
 
 All languages in this set are called Rational langauages.
 ]
+#exercise()[
+If $Sigma = {a,b,c}$, 
+
+(i) is $Sigma^*$ rational?\
+(ii) is language with all second letters $a$ rational?\
+(iii) is language with words that contain $c c$ rational?\
+(iv) is langauage with words not containing consecutive $c$'s rational?
+]
+#solution[
+ (i) Obviosuly as $Sigma^* = ({a} union {b} union {c})^*$.\
+ (ii) Can be reprasented as $Sigma {a} Sigma^*$.\
+ (iii) Can be reprasented using $Sigma^* {c c} Sigma^*$.\
+ (iv) $(a+b)^*(c(a+b)(a+b)^*)^*(c+ epsilon)$#footnote[Aish's solution].
+
+ A better solution by Neel was $(c+epsilon)((a+b)^+ (c+epsilon))^*$
+]
+
+#idea(title : "Regex Notation")[
+  We can use a regex like notation where $union <-> plus$ and dropping the brakets and dots and $a^+ = a a^*$.
+]
+
+#thm[All Rational Languages are Recognizable]
+#proof[We can identify the atoms $a,b,c,emptyset, epsilon$ etc and the operators are also closed under Finite Autmata.]
+
+#thm(title:"Kleene's Theorem")[
+  Every Recognizable language is rational.
+]
+#proof[
+  We claim that:
+  #automaton(
+    (
+      q1: (q1: "e11", q2:"e12"),
+      q2: (q2: "e22", q1:"e21")
+    )
+  )
+
+  We can see that the rational expression is $(e_(11)  + e_(12)e^*_(22)e_(21))^* e_(12) e^*_(22)$.
+
+#automaton(
+  (
+    q1:(q1:"e")
+  )
+)
+We can get the rational expression as $e^*$.
+
+  #automaton(
+    (
+      q1 : (q3:"a", q1:"b", q4:"a"),
+      q2:(q2:"a", q5:"b"),
+      q3:(q2:"a+b", q4:"e + b"),
+      q4:(q1:"b", q4:"a"),
+      q5:(q4:"b")
+    ),
+    final:"q2",
+    layout: layout.grid.with(spacing: 5.7, columns:  2)
+  )
+  We will now remove a state, say q3.
+    #automaton(
+    (
+      q1 : (q2:"a(a+b)", q1:"b", q4:"a(e+b) + a"),
+      q2:(q2:"a", q5:"b"),
+      q4:(q1:"b", q4:"a"),
+      q5:(q4:"b")
+    ),
+    final:"q2",
+    layout: layout.grid.with(spacing: 3, columns:  2)
+  )
+
+  We will now remove q4.
+
+  #automaton(
+    (
+      q1 : (q2:"a(a+b)", q1:"b + (a(a+b) + a)a*b",),
+      q2:(q2:"a", q5:"b"),
+      q5:(q1:"ba*b")
+    ),
+    final:"q2",
+    layout: layout.linear.with(spacing: 3)
+  ) 
+
+  We can now remove q5.
+  #automaton(
+    (
+      q1 : (q2:"a(a+b)", q1:"b + (a(a+b) + a)a*b",),
+      q2:(q2:"a", q1:"bba*b")
+    ),
+    final:"q2",
+    layout: layout.linear.with(spacing: 3)
+  ) 
+  Using the above case, we can get the rational expression. 
+
+]
+
+#thm[
+$
+  (e_1 + e_2)^* = e_1^* e_2^*
+$
+]

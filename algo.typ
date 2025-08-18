@@ -138,3 +138,51 @@ $
   T(n) = T((9n)/10) + T(n/10) + Theta(n)
   $
 ]
+#soln[
+  We can take the worst case scenario and say the recursion tree has depth $log_(10/9) n $. Every level of recursion has total work $Theta(n)$.
+
+  The time speant at leaves is $2^d$ where $d$ is the depth. Thus, $2^(log_(10/9) n)$
+
+  Thus, we take total time $
+  c n log_(10/9)(n) + 2^(log_(10/9) n)\
+  = O(n log n) + n^(1/log(10/9))\
+  = O(n^7)
+  $
+  Thus, we have a time complexity of $O(n^7)$.#footnote[This is an extreme upper bound. The actual number comes much closer to $n log(n)$ as the longest and shortest branches differ by a lot!]
+]
+
+== Master Method
+$
+T(n) = a T(n/b) + O(n^d)
+$
+
+Making the recursion tree, we have $log_b (n)$ depth. The work at some depth $k$ will be $a^k (n/b^k)^d$. We will have $a^(log_b(n))$ leaves.
+
+Thus, the total work will be
+$
+T(n) = n^d (underbrace( 1 + a/b^d + a^2/b^(2d) + dots, log_b (n))) + a^(log_b n )
+$
+
+Note,
+#todo[Copy from CS-161 slides!]
+
+#thm(title: "Theorem(Master's Theorem)")[
+  $
+  T(n) = a T(n/b) + O(n^d) => T(n) = cases(
+    O(n^(log_b (a))) & "if" a/b^d > 1\
+    O(n^d) & "if" a/b^d < 1\
+    O(n^d log(n)) & "if" a/b^d = 1
+  )
+  $#footnote[
+    There is absolutly nothing this theorem masters. It was name orignating from CLRS and other than working for some 'common algorithms' it is far inferior to just making the tree yourself.
+  ]
+]
+
+= Divide And Conquer Algorithms
+#idea[
+  + Break the input into smaller, disjoint parts.
+  + Recurse on the parts.
+  + Combine the solutions.
+]
+
+Step 1 and step 3 are normally where the work happens. For example in merge sort, we do almost no work in spliting and linear work in combining. On the other hand in quick sort, we do linear work in splitting and no work in combining.
