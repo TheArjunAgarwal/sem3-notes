@@ -21,8 +21,8 @@ jobs:
         with:
           name: PDF
           path: |
-          agth.pdf
-          alg3.pdf
-          algo.pdf
-          toc.pdf
+            agth.pdf
+            alg3.pdf
+            algo.pdf
+            toc.pdf
 
