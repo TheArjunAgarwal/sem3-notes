@@ -186,3 +186,34 @@ Note,
 ]
 
 Step 1 and step 3 are normally where the work happens. For example in merge sort, we do almost no work in spliting and linear work in combining. On the other hand in quick sort, we do linear work in splitting and no work in combining.
+
+== Convex Hull
+Given $n$ points $p in RR^2$ where $p = (x,y)$, the convex hull is the smallest polygon such that a line between any two points in inside or on the boundry of the hull.
+
+We can strech a rubber band over the points (which are nails) and let it go.
+
+A dumb algorithm is just checking every combination. This is roughly $O(n!)$.
+
+#psudo(title:"Convex Hull in cubic time")[
+  + For all $p, q in P subset.eq RR^2$
+    + Check if $op("sign")(p,q,r)$ is same for all $r in P backslash {p,q}$
+      + Include $p,q$ in solution
+]
+We have already gone from $n!$ to $O(n^3)$.
+
+Another option is to pick the lowest point and then sort by angles and pick the lowest points, one by one. This is called a Jarvis Search.
+
+Although, we have included this in the divide and conquer section for a reason!
+
+We will divide the points in two parts and then try to recombine.
+
+#psudo(title:"Divide and Conqour Convex Hull combining")[
+  + $i = 1$
+  + $j = 1$
+  + *while* $(y(i, j+1) > y(i,j) "or" y(i-1,j) > y(i,j))$
+    + *if* $y(i, j+1) > y(i,j)$: move right pointer $arrow.cw.half$
+    + $j = j+1 mod q$ {q := \# in the right hand side}
+  + else
+    + i = i-1 mod (p) {p := \# in the left hand side}
++ return $(a_i, b_j)$ as upper tangent 
+]

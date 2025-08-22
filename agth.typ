@@ -212,7 +212,7 @@ In first price auction, $t_i = b_i$.
 
 == Battle of the Sexes
 #definition[
-  We represent a situtation where two agents must simultaniously take an action where each of them prefers one option over the other but prefer coordination over doing different things. And example occurrence would be #footnote[Which is extremely stereotypical and doesn't reprasent the author and hopefully the prof's views.]:
+  We represent a situation where two agents must simultaneously take an action where each of them prefers one option over the other but prefer coordination over doing different things. And example occurrence would be #footnote[Which is extremely stereotypical and doesn't represent the author and hopefully the prof's views.]:
 
   #nfg(
     players: ("Husband", "Wife"),
@@ -278,7 +278,138 @@ $
 ]
 
 #remark(title: "Implications")[
-Each player gets the same payoff for any pure stratergy in the support of the MSNE strategy.
+Each player gets the same payoff for any pure strategy in the support of the MSNE strategy.
 ]
 
+== Equilibrium Computation
+=== Computing a SDSE
+#example[
+  #nfg(
+    players: ($P_1$, $P_2$),
+    s1: ($A$, $B$, $C$),
+    s2: ($D$, $E$, $F$),
+    [4,3],[5,1],[6,2],
+    [2,1],[8,4],[3,6],
+    [3,0],[9,6],[2,8])
+    Notice, $E$ is dominated by $F$ as $forall i, mu_2(F, s_(-i)) > mu_2(E, s_(-i))$. THis practically makes the game:
+    #nfg(
+    players: ($P_1$, $P_2$),
+    s1: ($A$, $B$, $C$),
+    s2: ($D$, $F$),
+    [4,3],[6,2],
+    [2,1],[3,6],
+    [3,0],[2,8])
+    Now $A$ dominates $B,C$ and after elimination, $D$ will dominate $E$ and we will be left with the nash equilibrium of $4,3$.
+]
+Also note, $(A,D)$ is a PSNE.
 
+Note, this algorithm by no means gives all the nash equilibrium, if there are multiple. We don't run into such issues with SDSE as only one can exist by the definition of Strict dominance.
+
+#example[
+#nfg(
+  players: ($P_1$, $P_2$),
+  s1:($A$,$B$,$C$),
+  s2:($D$,$E$,$F$),
+  [3,1],[0,1],[0,0],
+  [0,1],[4,1],[0,0],
+  [1,1],[1,1],[5,0]
+)
+We can eliminate $F$ as $D,E$ are strictly better.
+#nfg(
+  players: ($P_1$, $P_2$),
+  s1:($A$,$B$,$C$),
+  s2:($D$,$E$),
+  [3,1],[0,1],
+  [0,1],[4,1],
+  [1,1],[1,1]
+)
+Here, we can eliminate $C$ as if $P_2$ plays $D$ or $E$, we are better off playing $A$ or $B$ respectively.
+
+Another way to argue the same is $mu_1((A+B)/2, s_(-i)) > mu_1(C,s_(-i))$.
+]
+#note[
+ Here, playing $C$ is called the Bayesian Equilibrium as it is safe. 
+]
+
+#example[
+  #nfg(
+  players: ($P_1$, $P_2$),
+  s1:($A$,$B$,$C$),
+  s2:($X$,$Y$,$Z$),
+  [7,7],[4,2],[1,8],
+  [2,4],[5,5],[2,3],
+  [8,1],[3,2],[0,0]
+)
+We can get the gurentee finding the nash equilibrium by identifying the highest entry per row and column wrt the respective players.
+#nfg(
+  players: ($P_1$, $P_2$),
+  s1:($A$,$B$,$C$),
+  s2:($X$,$Y$,$Z$),
+  [$underline(7)$,7],[4,2],[1,$overline(8)$],
+  [2,4],[$underline(5),overline(5)$],[2,3],
+  [$underline(8)$,1],[3,$overline(2)$],[0,0]
+)
+Making $(5,5)$ the PSNE.
+]
+#algo[
+  For the column player, mark the maximum entry for them.
+
+  For the row player, mark the maximum entry for them.
+
+  The intersections are PSNEs.
+]
+
+=== Two Player Zero Sum Games
+#definition(title:"Two Player Zero Sum Games")[
+  A game with:
+  - $N = {1,2}$
+  - $S = {S_1, S_2}$
+  - $mu = {mu_1, mu_2}$
+  - $mu_1 (s_1, s_2) = -mu_2 (s_1, s_2)$
+]
+In these games, we only need to specify the payoffs for one player. We, by convention, do this for the row player.
+#nfg(
+  players: ($A$, $B$),
+  s1:($$,$$,$$),
+  s2:($$,$$,$$),
+  [2],[1],[1],
+  [-1],[1],[2],
+  [1],[0],[1]
+)
+For any stratergy,  $i$ of $P_1$ and $P_2$ will choose a stratergy such that,
+- $P_1$ chooses $max_i min_j a_(i j)$ (maxmin)
+- $P_2$ will choose $min_j max_i a_(i j)$. (minmax)
+
+If maxmin and minmax are equal, we are done and the value is the nash equilibrium.
+
+If a PSNE exists, we will get it by this process.
+
+If there is no PSNE, this obviously doesn't work. 
+#nfg(
+  players: ("P1", "P2"),
+  s1: ($R$, $P$, $S$),
+  s2: ($R$, $P$, $S$),
+  [$0$], [$-1$], [$1$],
+  [$1$],[$0$], [$-1$],
+  [$-1$], [$1$],[$0$]
+  )
+
+=== Saddle Point
+#definition(title:"Saddle Point")[
+  $(i,j)$ is a saddle point of a matrix $A$ if $a_(i j) >= a_(k j) forall k$ and $a_(i j) <= a_(i l) forall l$
+]
+#thm[
+  If $i,j$ and $k,h$ are saddle points, then $(i,h)$ and $k,j$ are also saddle points.
+]
+#proof[
+  $
+  a_(i j) >= a_(k j) >= a_(k h) >= a_(i h) >= a_(i j)
+  $
+  And we are done by squeeze theorem.
+]
+
+#definition(title:"Mixed Stratergy in 2 player zero sum game")[
+  Let $|S_1| = m$ and $|S_2| = m$. Let $x = (x_1, x_2, dots, x_n)$ be a mixed strategy for $P_1$ and $y = (y_1, y_2, dots, y_n)$ be a mixed strategy for $P_2$.
+
+  The expected payoff is $sum^n_(i=1) sum^m_(j=1) x_i y_j a_(i j) = x^T A y$
+]
