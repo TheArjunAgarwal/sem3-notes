@@ -281,8 +281,8 @@ $
 Each player gets the same payoff for any pure strategy in the support of the MSNE strategy.
 ]
 
-== Equilibrium Computation
-=== Computing a SDSE
+= Equilibrium Computation
+== Computing a SDSE
 #example[
   #nfg(
     players: ($P_1$, $P_2$),
@@ -359,7 +359,7 @@ Making $(5,5)$ the PSNE.
   The intersections are PSNEs.
 ]
 
-=== Two Player Zero Sum Games
+== Two Player Zero Sum Games
 #definition(title:"Two Player Zero Sum Games")[
   A game with:
   - $N = {1,2}$
@@ -382,6 +382,12 @@ For any stratergy,  $i$ of $P_1$ and $P_2$ will choose a stratergy such that,
 
 If maxmin and minmax are equal, we are done and the value is the nash equilibrium.
 
+#definition(title: "Maxmin-Minmax")[
+  The maxmin value refers to $max_(i in S_1) min_(j in S_2) a_(i j)$.
+
+The minmax value refers to $min_(j in S_2) max_(i in S_1) a_(i j)$.
+]
+
 If a PSNE exists, we will get it by this process.
 
 If there is no PSNE, this obviously doesn't work. 
@@ -393,8 +399,7 @@ If there is no PSNE, this obviously doesn't work.
   [$1$],[$0$], [$-1$],
   [$-1$], [$1$],[$0$]
   )
-
-=== Saddle Point
+We can also discuss Saddle points.
 #definition(title:"Saddle Point")[
   $(i,j)$ is a saddle point of a matrix $A$ if $a_(i j) >= a_(k j) forall k$ and $a_(i j) <= a_(i l) forall l$
 ]
@@ -413,3 +418,95 @@ If there is no PSNE, this obviously doesn't work.
 
   The expected payoff is $sum^n_(i=1) sum^m_(j=1) x_i y_j a_(i j) = x^T A y$
 ]
+
+We can define maxmin and minmax values here as:
+#definition(title:"Maxmin-minmax")[
+  maxmin value = $max_(x in Delta(S_1)) min_(y in Delta(S_2)) x^T A y$
+
+  minmax value = $min_(y in Delta(S_2)) max_(x in Delta(S_1)) x^T A y$
+]
+
+#lem[
+  $
+  min_(y in Delta(S_2)) x^T A y = min_(j in S_2) sum_(i=1)^m a_(i j) x_i
+  $
+]
+#proof[
+  It is obvious that
+  $
+    min_(y in Delta(S_2)) x^T A y <= min_(j in S_2) sum_(i=1)^m a_(i j) x_i 
+  $
+  as $S_2 subset.eq Delta(S_2)$.
+
+  To do the other way round,
+  $
+  x^T A y = sum_(j=1)^n y_j sum_(i=1)^m x_j a_(i j)\
+  >= sum_(i=1)^n y_j min_(k in S_2) sum_(i=1)^m x_i a_(i k)\
+  = min_(k in S_2) sum_(i=1)^m x_I a_(i k) dot sum_(i=1)^n y_j  \
+  = min_(k in S_2)  sum_(i=1)^m x_I a_(i k)
+  $
+  Thus, by squeeze theorem, we are done.
+]
+
+== Linear Programming for the the win
+We make an LP for the row player as:
+
+The row player has to to maximize $min_(j in S_2) sum_(i=1)^m a_(i j) x_i$ with the constrains $sum_(i=1)^m x_i = 1, x_i >= 0 forall i in {1,2,dots, m}$.
+
+Equivalently, maximize $z$ with the constrains $z <= sum_(i=1)^m a_(i j) x_i forall j in {1,2, dots, n}$, $sum_(i=1)^n x_i = 1$, $x_i >= 0 forall i in [m]$.
+
+#exercise(title:"Column Player's LP")[
+  Define the column players LP.
+]
+#soln[
+ minimize $w$ such that $w >= sum_(j=1)^n a_(i j ) y_j forall i in [m]$, $sum_(j=1)^n y_j = 1$, $y_j >= 0$ forall $j in [n]$. 
+]
+
+=== Duel of LP
+#example(title:"Toy LP")[
+  max $3 x_1 + 2 x_2 + x_3$ with constraints
+  + $x_1 + x_2 + x_3 <= 2$
+  + $3x_1 + x_3 <=4$
+  + $x_1 + x_2 + x_3 <= 5$
+  + $x_1, x_2, x_3 >= 0 $
+]
+We can get an upper bound by $3 * "eq" 3 => 3x_1 + 3x_2 + 3x_3 <= 15$.
+
+We can get a better upperbound by $"eq" 1 + "eq" 2 => 3x_1 + 3x_2 + 3x_3 <= 9$.
+
+The idea is that as atleast one coefficient is bigger, the sum is bigger and is an upperbound.
+
+But doing this for all combinations is going to be painfully time consuming. Let's try to do this algebraically and let the coefficients of equation 1,2,3 be $y_1, y_2, y_3$ in the linear combination.
+
+$
+x_1 (y_1 + 3 y_2 + y_3) + (y_1 + y_3) x_2  + (y_2 + y_3) x_3 <= 2 y_1 + 4y_2 + 5y_3
+$
+This leads to a LP
+
+Minimize $2 y_1 + 4y_2 + 5y_3$ with the constraints:
+- $y_1 + 3 y_2 + y_3 >= 3$
+- $y_1 + y_3 >= 2 $
+- $y_2 + y_3 >= 1$
+
+#thm[
+  The Row player LP and Column player LP are duel pairs.
+]
+#proof[
+  #todo[Computation]
+]
+
+== Strong Duality
+Optimum value of $f$ is the optimal value of its primal duel.
+
+Ler $x^* = (x_1^*,x_2^*, x_3^*, dots , x_m^*), z^*$ be the optimum values for Row player.
+
+$z^*$ must attain equality at some $j^* in [n]$ that is $z^* = sum_i a_(i j^*) x_i^*$ and $z^* <= sum_i a_(i j) x_i^* forall j in [n]$.
+
+By lemma, $z^* = min_(j in S_2) sum_(i=1)^n x_i^* = min_(y in Delta(S_2)) x^*^T A y $ and similarly, $w^* = max sum_(j=1)^n a_(i j^*) y_i = max_(x in Delta(S_2)) x^T A y^*$.
+
+Thus,
+$
+min_(y in Delta(S_2)) x^*^T A y = max_(y in Delta(S_2)) x^T A y^*
+$
+
+This is a nash equilibrium as no player can unilaterally increase payoff by moving.

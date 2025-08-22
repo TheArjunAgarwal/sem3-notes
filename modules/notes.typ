@@ -113,7 +113,7 @@ align(center,[#course-desc])
     outline(
       indent: auto,
       title: toc-title,
-      depth: 2,
+      depth: 3,
     ),
   )
 

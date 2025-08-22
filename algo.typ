@@ -217,3 +217,32 @@ We will divide the points in two parts and then try to recombine.
     + i = i-1 mod (p) {p := \# in the left hand side}
 + return $(a_i, b_j)$ as upper tangent 
 ]
+
+== Selection Problem
+#definition(title:"Selection Problem")[
+  *Input:* A set $A$ of $n$ distinct numbers and an index $i$, $1 <= i <= n$
+
+  *Output:* The element $x in A$ that is larger than exactly $i-1$ elements of $A$
+]
+A randomized algorithm is easy to see:
+#psudo(title:"Quick Select")[
+ + pick $x in A$ random
+ + Compute $k = op("rank")(x)$ -- x is the kth smallest element in A
+ + $B = {y in A | y < x}$
+ + $C = {y in A | y > x}$
+ + if $k == i$
+  + return x
++ if i < k
+  + QuickSelect(B, i)
++ if i > k
+  + QuickSelect (C, i-k)  
+]
+Out biggest problem in this algorithm is the fact that the worst case complexity is $O(n^2)$.
+
+The average case complexity is $O(n)$.
+
+Can we do better? 
+
+Yes!
+
+Let's pick the pivot by the process
