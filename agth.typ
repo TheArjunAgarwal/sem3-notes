@@ -512,13 +512,82 @@ $
 This is a nash equilibrium as no player can unilaterally increase payoff by moving.
 
 == Existence of Nash Equilibrium (mixed) in finite strategic form games
-Ler $(N, <s_i>, <mu_i>)$ be the game where $N = {1,2,dots,n}$, $s_i$ is stratergy set for player $i$, with $|s_i| = m forall i$ and and $mu_i : S_i times S_(-i) -> RR$ is the payoff function for player $i$.
+Ler $(N, <s_i>, <mu_i>)$ be the game where $N = {1,2,dots,n}$, $S_i$ is stratergy set for player $i$, with $|S_i| = m forall i$ and and $mu_i : S_i times S_(-i) -> RR$ is the payoff function for player $i$.
 
 Mixed strategy $sigma_i$ is a probability distribution over $S_i$.
 
-$Delta_i$ of $Delta(s_i)$ denotes the set of all mixed stratergies for player $i$. $Delta = Delta_1 times Delta_2 times dots times Delta_m$.
+$Delta_i$ of $Delta(S_i)$ denotes the set of all mixed stratergies for player $i$. $Delta = Delta_1 times Delta_2 times dots times Delta_m$.
 
 Expected payoff from $delta_i$ for player $i$ is
 $
-mu_i (sigma_i) =^Delta 
+mu_i (sigma_i) =^Delta sum_((s_1, dots, s_n) in S_1 times S_2 dots S_n) (product_(j=1)^n sigma_j (s_j)) mu_i (s_1, dots, s_n)
 $
+
+#definition[
+  $sigma^*$ is a Nash Equilibrium if for every player $i$,
+  $
+  mu_i (sigma^*) >= mu_i (s_i, sigma_(-i)^*) forall s_i in S_i
+  $
+]
+#thm(title:"Brouwer's Fixed Point Theorem")[
+  Let $B$ be a closed, bounded convex set. Let $f :: B -> B$ be a continuous function, then $exists x in B op("s.t.") f(x) = x$
+]
+We want to define $B, f$ such that the Nash Equilibriium is the fixed point of $f$. Define $B = Delta$.
+
+Define $f$ such that $sigma in Delta$ is not a NE then $f(sigma) != sigma$ NS IF $sigma^*$ is a NE then $f(sigma^*) = sigma^*$.
+
+*Attempt 1*: Define $f(sigma) = rho$ where $rho in Delta, rho = (rho_1, rho_2 , dots, rho_n)$ such that
+$
+rho_i = arg max_(delta_i in Delta_i) mu_i (sigma_(-i), delta_i)
+$
+Recall, this is called the best response.
+
+The problem is, this is not a function and if we apply a tie breaking rule, it is not continuous. We could use the powerset as the domain, but that would require Katakumi's fixed point which is more analytical than we wish to be. 
+
+#example(title:"Matching Pennies")[
+  #nfg(
+  players: ($P_1$, $P_2$),
+  s1:($H$,$T$),
+  s2:($H$,$T$),
+  [1, -1],[-1, 1],
+  [-1, 1],[1, -1]
+  )
+  Let row player choose the mixed stratergy $(p,1-p)$ and column player choose $(q, 1-q)$. The problem is
+  $
+  p > 1/2 => q = 0\
+  p < 1/2 => q = 1\
+  p = 1/2 => 0 <= q <= 1
+  $
+  This is an cointer example to the continuity of $f$.
+]
+
+*Modifying $f$*: We first define a gain function of player $i$ for deviatoon to $s_(i j)$ from $sigma_i$.
+$
+g_(i j) = max {mu_i (sigma_(-i), s_(i j)) - mu_i (sigma), 0}
+$
+We now define $
+f_(i j) sigma = (sigma_(i j) + g_(i j) (sigma))/(sum_(k=1)^m (sigma_(i k) + g_(i k)(sigma))) = (sigma_(i j) + g_(i j) (sigma))/(1 + sum_(k=1)^m g_(i k)(sigma))
+$
+
+We want 
+$
+sum_(k=1)^m f_(i k) (sigma) = 1
+$
+
+We will define $
+f(sigma) = := rho\
+f(sigma)= f(sigma_(11), dots, sigma_(1 m), dots, sigma_(n 1), dots sigma_(n m) )\
+= (rho_1, dots, rho_(1m), dots, rho_(n 1), dots, rho_(n m)).
+$
+
+Let $sigma^*$ be a fixed point of $f$.
+
+$
+f_(i j) = sigma^*_(i j)\
+sigma^*_(i j)  = (sigma_(i j) + g_(i j) (sigma))/(1 + sum_(k=1)^m g_(i k)(sigma))\
+<==> g_(i j)(sigma^*) = 0 forall j\
+$
+
+#todo[Will complete from Solan...]
+
+Thus, by Brower's, we are done. 
