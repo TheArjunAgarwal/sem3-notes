@@ -510,3 +510,15 @@ min_(y in Delta(S_2)) x^*^T A y = max_(y in Delta(S_2)) x^T A y^*
 $
 
 This is a nash equilibrium as no player can unilaterally increase payoff by moving.
+
+== Existence of Nash Equilibrium (mixed) in finite strategic form games
+Ler $(N, <s_i>, <mu_i>)$ be the game where $N = {1,2,dots,n}$, $s_i$ is stratergy set for player $i$, with $|s_i| = m forall i$ and and $mu_i : S_i times S_(-i) -> RR$ is the payoff function for player $i$.
+
+Mixed strategy $sigma_i$ is a probability distribution over $S_i$.
+
+$Delta_i$ of $Delta(s_i)$ denotes the set of all mixed stratergies for player $i$. $Delta = Delta_1 times Delta_2 times dots times Delta_m$.
+
+Expected payoff from $delta_i$ for player $i$ is
+$
+mu_i (sigma_i) =^Delta 
+$

@@ -658,3 +658,74 @@ $
   (e_1 + e_2)^* = e_1^* e_2^*
 $
 ]
+
+#todo[2 classes worth of notes]
+
+We have show rational, recognizable and regular langauages are the same things with the former being equal by Kleene's and the latter by Myhill-Nerode.
+
+We also saw closure properties as well as proof techniques for non-recognizablity such as fooling sets and pumping lemma.
+
+We also saw that there is a unique minimal automata.
+
+We can note NFA to DFA conversion takes exponential nodes.
+
+Rational to NFA takes linear nodes.
+
+NFA to Rational takes exponential nodes.
+
+Membership where we are given a word $w$ and a 
+#footnote[I don't trust half these numbers. Aish is dumb dumb.]
+
+Does a fiven NFA accept only a finite number of words?
+
+Given two automata $cal(A)_1$ and $cal(A)_2$, is $L(cal(A)_1) = L(cal(A)_2)$?
+
+DFA minimization is polynomial in number of nodes and size of alphabets.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
