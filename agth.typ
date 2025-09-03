@@ -552,16 +552,16 @@ The problem is, this is not a function and if we apply a tie breaking rule, it i
   [1, -1],[-1, 1],
   [-1, 1],[1, -1]
   )
-  Let row player choose the mixed stratergy $(p,1-p)$ and column player choose $(q, 1-q)$. The problem is
+  Let row player choose the mixed strategy $(p,1-p)$ and column player choose $(q, 1-q)$. The problem is
   $
   p > 1/2 => q = 0\
   p < 1/2 => q = 1\
   p = 1/2 => 0 <= q <= 1
   $
-  This is an cointer example to the continuity of $f$.
+  This is an counter example to the continuity of $f$.
 ]
 
-*Modifying $f$*: We first define a gain function of player $i$ for deviatoon to $s_(i j)$ from $sigma_i$.
+*Modifying $f$*: We first define a gain function of player $i$ for deviation to $s_(i j)$ from $sigma_i$.
 $
 g_(i j) = max {mu_i (sigma_(-i), s_(i j)) - mu_i (sigma), 0}
 $
@@ -591,3 +591,79 @@ $
 #todo[Will complete from Solan...]
 
 Thus, by Brower's, we are done. 
+
+== Two Player Non-Zero Sum Games
+#definition[
+  Given players $1,2$ and strategy sets $S_1, S_2$ and payoff matrices $R$ for player $1$ and $C$ for player $2$. A mixed strategy $(x^*, y^*)$ is Nash Equilibrium if and only if
+  $
+  x^*^T R y^* >= (R y^*)_i forall i in [n]\
+  x^*^T C y^* >= (x^*^T R) forall i in [n]
+  $
+  where the LHS are expected payoffs. Also $(M_i)$ is the $i^"th"$ position in the matrix. We could also write this as $e_i^T R y^*$ and $x^*^T R e_i$ respectively.
+]
+
+Notice, if one switches say $R$ for $R' = R+a$ that is
+$
+mat(delim: "[",
+  r_(1,1) + a, dots, r_(1,m) + a;
+  r_(2,1) + a, dots, r_(2,m) + a;
+  dots.v, dots.v, dots.v;
+  r_(n,1) + a, dots, r_(n,m) + a;
+)
+$
+#claim[
+  Set of NE for $(R', C)$ are same as that of $(R,C)$. This implies, by symmetry, that $(R, C+b)$ has same NEs as $(R,C)$.
+]
+#claim[
+  Set of NE remain unchanged for $(1/a R,C)$ wrt $(R,C)$ and similarly the set of NE remains unchanged for $(R, 1/b C)$ wrt $(R,C)$.
+]
+
+This allows us to only deal with $R_(i,j), C_(i,j) in [0,1]$.
+
+=== NE by Support enumeration
+Let $S subset.eq [n]$, $T subset.eq [m]$ be set of strategies in the support of a NE that is $x_i > 0 quad  forall i in S$, $ y_i > 0 quad forall i in T$.
+
+We will write a LP for this, named *LP[S,T]*.
+$
+"probability constraints" & cases(x_i >= 0 quad forall i in [n], y_i >= 0 quad forall i in [n],sum_(i=1)^n x_i = 1, sum_(i=1)^m y_i = 1)\
+
+"NE Constraints" & cases((R y)_i &>= (R y)_j quad &forall i in S\, j in [n],
+(x^T C)_i &>= (X^T C)_j quad &forall i in T\, j in [m])
+$
+
+#claim[
+  A solution to the LP say $(x^*, y^*)$ is a NE.
+]
+#proof[
+  If $x^*, y^*$ is not a NE then one of the players has an incentive to deviate to another pure strategy, which violates the NE constraints
+]
+
+#psudo(title:"NE algorithm by support enumeration")[
+  + for each $S subset.eq [n], T subset.eq [m]$:
+    + if *LP[S,T]* has a feasible solution $(x,y)$
+      + return $(x,y)$
+]
+This clearly has a $2^(n+m) op("poly")(n+m)$ running time.
+
+This is clearly not polytime. As we shall see, that the solution lies in complexity class PPAD and is hence, believed not to be possible in polytime.
+
+=== Lemke-Howson Algorithm
+Characterization of NE for this algorithm is using the translation and scaling transforms and using the fact that the max achievable payoff is always $1$ and the payoffs are $>= 0$. We say $(x^* /(sum^n x_i^*), y^* /(sum^m y_i^*))$ is a NE if:
+$
+x_i^* &= 0 quad "or" quad  (R y^*)_i &= 1 quad &forall i in [n]\
+y_i^* &= 0 quad "or" quad  (x^*^T C)_i &= 1 quad &forall i in [m]
+$
+
+#definition(title : "Polytope, Polyhedron, Half-Space")[
+  A bounded polyhedron is polytope.
+
+  intersection of half-spaces is called a polyhedron.
+
+  Given a $n$ dimensional plane, the plane can be split into two parts by a $n-1$ dimensional shape. This is called half-space. For example $a x + b > 0$ defines a half-space in 2D while $a_1x_1 + a_2x_2 + a_3x_3 >= 0$ defines a half-plane in 3D
+]
+
+Consider the polytope:
+$
+P = {(x,y) | x_i >=_(i in [n]) 0, y_i >=_(i in [m]) 0, (R y)_i <= 1, (x^T C)_i <= 1}
+$
+While the polytope itself doesn't define nash equilibria but some of it's vertex do. We will hop from vertex to vertex upto some condition to get nash equilibria.
