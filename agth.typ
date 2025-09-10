@@ -22,6 +22,7 @@
   contact-details: "thearjunagarwal.github.io", // Optional: Maybe a link to your website, or phone number
   toc-title: "Table of Contents"
 )
+#pagebreak()
 
 = Games and Equilibria
 We make the following assumptions:
@@ -706,10 +707,6 @@ We relax the corresponding to the old duplicate label and proceed.
 
 At any point, say $t$ if $(x_t, y_t)$ have all the labels, output it as a NE. 
 
-#note[
-Note, the constraints look something like 
-]
-
 #claim[
   For any $i != j$, $(x_i, y_i) != (x_j, y_j)$
 ]
@@ -724,4 +721,130 @@ Note, the constraints look something like
 ]
 #cor[
   The odds in a mixed nash equilibrium are rational.
+]
+
+== Mixed Nash Equilibriium in 2 Player Games
+$N = {1,2}, S_1 = [n], S_2 = [m]$ with payoff matrices $R,C$.
+
+Characterization of MNE is
+$
+P : "set of points" (x,y) in RR^(m+n) "s.t."\
+x >= 0 forall i in [n]\
+R_i y <= 1 forall i in [n]\
+y_j >= 0 forall j in [m]\
+x^T C_j >= 0 forall j in [m]
+$
+$(x,y) in P$ is a MNE if and only if
+$
+forall i in [n], "either" x_i = 0 "or" R y_i = 1 : "Label" i "cases"\
+forall j in [n], "either" x_j = 0 "or" x^T C_j = 1 : "Label" n+j "cases"
+$
+$(x,y)$ has all labels in $[m + n]$.
+
+#underline[*Non-Degeneracy assumption*] $=>$ exactly $m+n$ labels for any vertex of $P$.
+
+Note $(0,0)$ has all labels but is not a NE.
+
+#psudo(title: "Lemke-Hawson Algorithm")[
+  + Start at $(0,0)$, fix label $1$.
+  + Relax the constraint $equiv "label" 1$ (ie $x = 0$)
+  + Goto next vertex $(x^((1)),y^((1)))$
+    + Either all labels exist $=>$ MNE
+  + Or a duplicate label $k$ exists
+    + Relax the "old" constraint $equiv$ label $k$
+  + Goto $(x^((2)), y^((2)))$
+  + so on...
+  + Let $(x^((0)), y^((0))), dots, (x^((t)), y^((t)))$ be the visited vertices.
+  + All $(x^((i)), y^((i))), 0 < i < t$ miss label $1$.
+]
+
+This algorithm is clearly exponential time as our polytope may have exponential vertices.
+
+The edges we visit form a graph, specifically a path where the first and last vertex have degree $1$ and the other vertices have degree $2$.
+
+== Complexity of algorithm
+As with most problems in computer science, we want to know how hard it is. After all after being saddened by not getting a polytime algorithm, we want to show it is unlikely that anyone else will#footnote[Unless P = NP which is still unlikely.].
+
+The problem in showing that it is NP lies in the definition of NP itself.
+
+#definition(title: "NP")[
+  NP is a class of decision problems with yes/no answer and there exists a polytime verifiable certicificate for a yes answer.
+]
+Our problem is not a decision problem. So what do we do?
+#definition(title: "Functional NP (FNP)")[
+  If there is a certificate (solution), output one.
+
+  Note, the certicificate should be polytime verifiable.
+]
+Clearly, MNE $in$ FNP. So can we show MNE is FNP-Complete.
+#thm[
+  If MNE is FNP-Complete, NP $=$ co-NP
+]
+#note[
+  It is believed that NP $!=$ co-NP, not as strongly as P $!=$ NP but strongly enough. It is still open nonetheless.
+]
+#example[
+  Take your favorite NP-complete problem. The instructor took Hamililtonian Path.
+
+  Let's there be a reduction from Hamililtonian Path to MNE. 
+  
+  Input will be a graph $G$ in which we want to compute the Hamililtonian path.
+
+  Reduction will be something that takes a graph $G$ and converts it into an instance of 2-Player Game $Gamma$ with the property: 
+  
+  $G$ has a Hamililtonian path $<==>$ $Gamma$ has a MNE which maps back to "yes"
+
+  $G$ has no Hamililtonian path $<==>$ $Gamma$ has a MNE which maps back to "no"
+]
+
+Let's take a slightly less ambitious goal.
+#definition(title : "TFNP")[
+  Total FNP is the class of FNP problems that always have a solution.
+]
+This still doesn't help us out as there are no known TFNP problems.
+
+So we go down to PPAD, a class contained in TFNP.
+#definition(title : "PPAD")[
+  Polynomial Parity Argument Directed version is a complexity class defined by a cannonical problem called the #underline[*end of line*] problem.
+]
+#definition(title : "End of Line")[
+  Given $G$ possibly exponential sized graph with polytime algorithm (or circuit) to determine neighbours of a given vertex.
+
+  Every vertex has in-degree $<= 1$ and out-degree $<= 1$.
+
+  Q: Given a source, find a sink (any sink, not the one corresponding to the source!)
+]
+#thm[
+  NME is PPAD complete
+]
+#proof(title :"High Level Proof")[
+  NME is in PPAD by the Lemke-Hawson algorithm. We do this reduction in 2 steps.
+  + Reduce End of Line to (approx) Brower's Fixed Point.    
+  + Reduce approx Brower Fixed Point to approx MNE.
+
+We will do the first part by an intermediate step called *Sperner Lemma*.
+
+#lem(title:"Sperner's Lemma")[
+  Given a lattice as an input with the lattice points colored in three colors with every boundry being forbidden to use one color. The intermediate vertices can have any color (from the 3).
+
+  We define a triangle as 3 points in the same cell. That is a $1, 1, sqrt(2)$ right angle triangle where lengths are unit.
+
+  Sperner's Lemma states that there exists a triangle with all vertices having distinct colors.
+]
+#definition(title : "Sperner's Lemma Problem")[
+  Given a lattice as an input with the lattice points colored in three colors with every boundry being forbidden to use one color. The intermediate vertices can have any color (from the 3).
+
+  We define a triangle as 3 points in the same cell. That is a $1, 1, sqrt(2)$ right angle triangle where lengths are unit.
+
+  Find: a triangle with all vertices having distinct colors.
+]
+
+We can solve Brower Fixed Point on $f : [0,1]^2 -> [0,1]^2$, we want $x "s.t." f(x) = x$.
+
+We can just declare $0^(degree)-120^(degree)$ as red, $120^(degree)-240^(degree)$ as yellow and $240^(degree)-360^(degree)$ as blue and color everything by this. We will use Sperner to find the approximate fixed point.
+
+So our flow chart is
+$
+"End of Line" -> "Sperner Problem" -> "Approx Brower Fixed Point"\ -> "Arithmetic Circuit" -> "Game" -> "MNE"
+$
 ]
