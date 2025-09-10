@@ -653,17 +653,75 @@ $
 x_i^* &= 0 quad "or" quad  (R y^*)_i &= 1 quad &forall i in [n]\
 y_i^* &= 0 quad "or" quad  (x^*^T C)_i &= 1 quad &forall i in [m]
 $
+The idea is that instead of the payoff's being variabales, we can sort of normalize them to $1$ and then make a system of linear equations using it. This will 
 
-#definition(title : "Polytope, Polyhedron, Half-Space")[
-  A bounded polyhedron is polytope.
+#definition(title : "Polytope, Polyhedron, Half-Space, Vertex")[
+  A bounded *polyhedron* is *polytope*.
 
-  intersection of half-spaces is called a polyhedron.
+  Intersection of *half-spaces* is called a *polyhedron*.
 
-  Given a $n$ dimensional plane, the plane can be split into two parts by a $n-1$ dimensional shape. This is called half-space. For example $a x + b > 0$ defines a half-space in 2D while $a_1x_1 + a_2x_2 + a_3x_3 >= 0$ defines a half-plane in 3D
+  Given a $n$ dimensional plane, the plane can be split into two parts by a $n-1$ dimensional hyper-plane. This is called *half-space*. For example $a x + b > 0$ defines a half-space in 2D while $a_1x_1 + a_2x_2 + a_3x_3 >= 0$ defines a half-space in 3D.
+
+  *Vertex/Extreme Points* in $RR^k$ is the intersections of $k$ linearly independent hyper-planes.
 ]
 
 Consider the polytope:
 $
 P = {(x,y) | x_i >=_(i in [n]) 0, y_i >=_(i in [m]) 0, (R y)_i <= 1, (x^T C)_i <= 1}
 $
+We are assuming non-degeneracy here.
+#definition(title : "Non-Degeneracy")[
+  Any set of $ >m+n$ constraints do not meet at one point.
+]
 While the polytope itself doesn't define nash equilibria but some of it's vertex do. We will hop from vertex to vertex upto some condition to get nash equilibria.
+
+At Nash equilibrium, by the stability condition, $n$ of the equations in 
+
+${x_i >=_(i in [n]) 0, (R y)_i <= 1}$
+
+and $m$ of the equations in 
+
+${y_i >=_(i in [m]) 0, (x^T C)_i <= 1}$.
+
+Thus, $m+n$ many equalities the NE must have. That implies NE is a vertex of $P$.
+
+The vertex $x,y = (arrow(0)_n, arrow(0)_n)$ is not a NE. This is called an artificial equilibrium.
+
+A vertex $x>0$ $R y_i < 1$ but $x_2 = 0, R_2 y = 1, dots$ is not a NE. Stratergy $1$ has $+$ve prov but not max payoff.
+
+Let $(hat(x), hat(y))$ be a vertex. Define a set of labels for each vertex. Define a set of labels for each vertex $(hat(x), hat(y))$ has a label $i in [n]$ if either $x_i = 0$ or $R_i y = 1$. Also $(hat(x), hat(y))$ has a label $n+j$ if $y_2 = 0$ or $x^T C^((j)) = 1$.
+
+#claim[
+  $(tilde(x),tilde(y))$ is a NE if and only if $H$ has all $m+n$ labels and $(tilde(x), tilde(y)) != (arrow(0)_n, arrow(0)_m)$ Under the non-degeneracy assumption.
+]
+*Goal* To find $(tilde(x), tilde(y)) != (arrow(0)_n, arrow(0)_m)$ and has all the labels.
+
+So let's start at $(x_0 y_0) = (arrow(0)_n, arrow(0)_m)$.
+
+Fix label $J$, relax the constraint $x_1 = 0$; $x_2 = dots = x_n = 0, y_1 = dots = y_n = 0 x_1 > 0$.
+
+This new vertex, say $(x_1, y_1)$ doesn't have label $1$, but has a duplicate label $in {n+1, dots, n+m}$, say $k = 1$.
+
+We relax the corresponding to the old duplicate label and proceed.
+
+At any point, say $t$ if $(x_t, y_t)$ have all the labels, output it as a NE. 
+
+#note[
+Note, the constraints look something like 
+]
+
+#claim[
+  For any $i != j$, $(x_i, y_i) != (x_j, y_j)$
+]
+#proof[
+  $(x_t, y_t)$ has all labels and $(x_0, y_0)$ is $(0,0)$.
+
+  All intermediate vertices $(x_i, y_i)$ with duplicate labels $k_i$ have only two neighbors, corresponding to the duplicates. With only two ways of coming, there are only two ways of going, ensuring that we can never repeat vertices.
+]
+
+#cor[
+  Every game has odd number of nash equilibrium.
+]
+#cor[
+  The odds in a mixed nash equilibrium are rational.
+]
