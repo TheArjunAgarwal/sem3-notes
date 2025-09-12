@@ -899,7 +899,7 @@ respectively where the mixed equilibrium is worse for both as they are assigning
 
 These are called Corealated equilibria.
 #definition(title:[Corealated Equilibriium])[
-#algo[
+#algo[. 
   Given $n$-players $[n]$, stratergy sets $S_1, dots, S_n$.
 
   - A coordinator declares a probability distribution on $S_1 times dots S_n$.
