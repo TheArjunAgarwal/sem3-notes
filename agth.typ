@@ -848,3 +848,105 @@ $
 "End of Line" -> "Sperner Problem" -> "Approx Brower Fixed Point"\ -> "Arithmetic Circuit" -> "Game" -> "MNE"
 $
 ]
+
+== Alternatives to Nash Equilibrium
+Some issues with Nash Equilibria are:
+- It is hard to compute (unless PPAD $subset.eq$ P, which is unlikely)
+- Many Nash Equilibria may exist, it is hence difficult to predict players behavior.
+- Payoff at Nash Equilibrium may be much smaller than optimum (cost of anarchy)
+
+#remark[
+  For example, in Prisioner's Dilemma:
+  #nfg(
+  players: ("P1", "P2"),
+  s1: ($C$, $D$),
+  s2: ($C$, $D$),
+  [$-5,-5$], [$-1,-10$], 
+  [$-10, -1$], [$-2, -2$],
+)
+The optimal cases is $-2, -2$ but the Nash equilibrium is $-5, -5$ which makes the cost of anarchy $2.5$ and is not desireable from players point of view.
+]
+
+#prob[
+  Can we circumvent the hardness of Nash Equilibriium by computing say the $epsilon$-Nash Equilibriium?
+]
+#definition(title: [$epsilon$-Nash Equilibrium])[
+  $(sigma^*_1,dots, sigma^*_n)$ is a $epsilon-$NE if
+  $
+  forall i in [n] quad mu_i (sigma^*_i, sigma^*_(-i)) >= mu_i (sigma'_i, sigma^*_(-i)) - epsilon forall sigma'_i in Delta_i
+  $
+]
+Unfortunately, this is also PPAD complete for all $epsilon$ as our proof for PPAD-hardness for NE uses approximate Brower's fixed point and more approximation won't really allow for any ease in computation.
+
+#thm[
+  Around each NE, there are $epsilon$-NE but converse may not hold as $exists$ games where an $epsilon$-NE is 'far' from any NE.
+]
+=== Corealated Equilibria
+#example[
+    #nfg(
+  players: ("P1", "P2"),
+  s1: ($C$, $M$),
+  s2: ($C$, $M$),
+  [$2,1$], [$0,0$], 
+  [$0,0$], [$1,2$],
+)
+The NE are clearly $C$ and $M$ pure and $((2/3, 1/3) (1/3, 2/3))$ mixed. The expected payoffs of the equilibrium are:
+$
+(2,1), (1,2), (2/3, 2/3)
+$
+respectively where the mixed equilibrium is worse for both as they are assigning some probability to the undesireable $C M, M C$ options.
+]
+
+These are called Corealated equilibria.
+#definition(title:[Corealated Equilibriium])[
+#algo[
+  Given $n$-players $[n]$, stratergy sets $S_1, dots, S_n$.
+
+  - A coordinator declares a probability distribution on $S_1 times dots S_n$.
+
+  - The coordinator 'privately' samples the joint distribution for a stratergy combination.
+
+  - The coordinator tells player $i$ to play $s_i$
+
+  Note: The player may choose to or not to heed the advice.
+  ]
+A distribution $D$ on $S_1 times dots times S_n$ is a CE if $forall i, forall b_i, b'_i in S_i$
+$
+EE_(s tilde D) [mu_i (b_i, s_(-i)) | s_i = b_i] >= EE_(s tilde D) [mu_i (b'_i, s_(-i)) | s_i = b_i]
+$
+Basically, the player is better off heeding the advice of the coordinator given everyone else is heeding the advice of the coordinator.
+]
+
+#example(title: "Chicken")[
+  #nfg(
+  players: ("P1", "P2"),
+  s1: ($D$, $C$),
+  s2: ($D$, $C$),
+  [$0,0$], [$5,1$], 
+  [$1,5$], [$4,4$]
+  )
+  This game comes from a dumb things teenagers did 'back in the day' #footnote[Nowadays, teenagers have better (read safer) things to do in their time. Unfortunately, social media fame, friendship graphs, min-maxing for university/NEET-JEE/Olympiads etc are much harder to study.] where they would drive towards each other at some speed and the first person to hit the breaks (Chicken out) would lose. The issue is if two hot headed (or stupid, albeit it is hard to tell the difference) drive into each other.
+
+  We can see the Nash Equilibria are $(A,B), (B, A), (1/2 A, 1/2 B)$ whereas we can have a CE of $1/3 (A,B), 1/3 (B,A), 1/3 (B, B)$.
+]
+
+As John Green once said: "Turtles all the way down!", we will say Equilibria all the way down.
+
+$
+"Dominent Equilibria" subset.eq "Weakly Dominent Equilibria" subset.eq "Nash Equilibria" subset.eq "Corelated Equilibria"
+$
+where the equilibria from Nash onwards are gurenteed to exist and Corealated is easy to compute.
+
+#thm[
+  CE form a convex set
+]
+
+#algo[
+  We can compute CE using LP:
+  $
+  sum_j A_(i j) p_(i j) >= sum_(j) A_(i' j) p_(i j)\
+  sum_j B_(i j) p_(i j) >= sum_(i) B_(i j') p_(i h)\
+  sum_(i, j) p_(i j) = 1\
+  p_(i j) > 0 
+  $
+]
