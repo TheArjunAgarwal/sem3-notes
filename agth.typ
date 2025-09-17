@@ -950,3 +950,111 @@ where the equilibria from Nash onwards are gurenteed to exist and Corealated is 
   p_(i j) > 0 
   $
 ]
+= Mechanism Design
+#definition(title:"Mechanism Design")[
+  Till now we have been given players, game and strategies and we want to find outcome via the equilibrium.
+
+  We will now do mechanism design where we are given the players and our ideal outcome and we want to come up with a game where the equilibrium is in line with our outcome.
+]
+#example()[
+  In making a cricket tournament, we don't want players to lose on purpose to get an easier opponent later and have better medal odds.
+
+  A faliure of this was the 2016 Rio Olympics where the mixed badminton was structured so badly that both teams were trying to lose in an extremely hard to watch match.
+]
+
+Mechanism design is used to design tournaments, voting schemes and schemes to divide stuff.
+
+= Fair Division
+#definition(title:"Division")[
+  $angle.l X_1, X_2, dots, X_n angle.r$ a division of $[0,1]$ if
+  $
+  X_i subset [0,1],\
+  X_i inter X_j = emptyset\
+  union.big_(i=1)^n X_i = [0,1]
+  $
+]
+#definition(title: "Envy Free")[
+  Given $n$ agents and their valuation functions $v_i$, and we want to divde a cake $[0,1]$ then $angle.l X_1, X_2, dots, X_n angle.r$ a EF division if
+  $
+  forall i, j in [n]; v_i (X_i) >= v_i (X_j)
+  $
+]
+#prob[Envy Free Cake Division on 2 agents]
+#solution[
+  This is rather easy. We ask one agent to cut and other to choose.
+
+  Another idea is that I keep moving the knife and when an agent is satisfied say at $a$, I cut the cake there and give them the piece $[0,a]$ as 
+]
+#prob[
+  Envy Free Cake Division with 3 agents
+]
+#prob[Given an apartment with $n$ rooms and rent $k$, we want to divide the apartment between $n$ roomates with valuation functions $v_i : [n] times [0,k] -> [0,1]$.]
+== Detour: Sperner's Lemma
+#definition(title: "Sperner Coloring on Triangles")[
+  Given a triangle $A B C$ divided into triangles, a coloring of vertices such that
+  - Each of the three vertices $A$, $B$, and $C$ of the initial triangle has a distinct color.
+  - The vertices that lie along any edge of triangle $A B C$ have only two colors, the two colors at the endpoints of the edge. For example, each vertex on $A C$ must have the same color as $A$ or $C$. 
+]
+#thm(title: "Sperner's Lemma in Triangles")[
+  Given any Sperner colored triangulation, there exists odd numver of fully colored elementary triangle (has all three colors.)
+]
+#cor[
+  Given any Sperner colored triangulation, there exists atleast one of fully colored elementary triangle.
+]
+
+#definition(title: "Simplex")[
+  A 0 simplex is just a point.
+
+  A 1 simplex is a line.
+
+  A 2 simplex is a triangle.
+
+  A 3 sinpmex is a tetrahedron.
+
+  So on and so fourth.
+]
+
+#definition(title:"Facet")[
+  Choosing $n$ vertices from a $n+1$-simplex is called a facet.
+]
+#definition(title: "Sperner Coloring")[
+  Given a $n$ simplex divided into $n$ simplices, we call a coulering Sperner if:
+  - Each of the boundry vertices of the initial simplex has a distinct color.
+  
+  - The vertices that lie along any facet $i$ (named after the boundry vertice not in the facet) doesn't have color $i$.
+]
+#thm(title: "Sperner's Lemma")[
+  Any Facet of a sperner colored simplex is also sperner colored, also, number of rainbow elementary $n$-simplices is odd.
+]
+#proof[
+  #definition(title: "Door")[
+    Door is a facet of elementary simplex if it has labels $angle.l 1 dots n angle.r$. For a $3$ simplex (triangle), it is edges with vertices colored $(1,2)$.
+  ]
+
+#lem[
+  We have an odd number of doors per facet.
+]
+
+  We will now induct on $n$.
+
+  (B) For $1$ simplex, We are obviously done as $1-2$ rainbow will be there.
+
+  (S) Let Sperner hold for $n-1$ simplex.
+
+  For an $n$ simplex, The $n$ facet is $n-1$ simplex and by induction, we will have odd number of doors via Sperner.
+
+  We can now enter via doors and lock them behind us. If we end up in a room, it is rainbow.
+
+  If we exit the building, we will close the door we left through and close it behind us.
+
+  If some rainbow room is unreachable, we claim that if we were to start there, we would end up walking to another unreachable rainbow room. Thus, the unreachable rooms come in pairs.
+
+  Thus, we have odd number of rainbow rooms, proving the Sperner's Lemma.
+]
+== Back to Fair Division
+
+#soln[
+  Let's start by solving 3-EFX via Sperner
+
+  #todo[Nice image and stuff]
+]
