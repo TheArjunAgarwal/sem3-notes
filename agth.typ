@@ -1,6 +1,9 @@
 #import "modules/notes.typ": *
 #import "@preview/finite:0.5.0": *
 #import "@preview/game-theoryst:0.1.0" : *
+#import "@preview/mannot:0.2.2": markrect
+
+#let boxed(..args) = markrect(..args)
 #show: thm-rules
 
 #show: noteworthy.with(
@@ -1058,3 +1061,151 @@ Mechanism design is used to design tournaments, voting schemes and schemes to di
 
   #todo[Nice image and stuff]
 ]
+
+
+#todo[Lecture on 19 th]
+
+== Fair Division of indivisible goods
+
+#todo[Lecture on 19 th]
+
+As we have shown, in divisible case, EF allocation always exists.
+
+In indivisible goods, EF might not always exist. For example, *2 agents 1 good*.
+
+However, we can do EF1 in P.
+
+#definition(title: "EF1")[
+  An allocation is EF1 if for any agents $i,j in [n]$
+  $
+  exists g in A_j "s.t."  v_i (A_i) >= v_j (A_i - g)
+  $
+  that is agents don't envy each other upto removal of one good (or addition of one chore.)
+]
+
+#definition(title: "Pareto")[
+  An allocation $A succ B$ if
+  $
+  forall i in [n] quad v_i (A_i) >= v_i (B_i)\
+  exists j in [n] quad v_j (A_i) gt.nequiv v_i (B_i)
+  $
+]
+
+#definition(title:"Pareto Optimal (PO)")[
+  $A$ is Pareto optimal if there is no $B$ such that $B succ A$.
+
+  Basically, $A$ is PO if you cannot make some agents better off without making enyone worse off.
+]
+
+Note, PO always exists and the proof if by the fact that giving everything to the same agent does achive that.
+
+#definition(title: "Social Welfare")[
+  Social welfare of allocation $A$ is
+  $
+  op("SW")(A) = sum_(i in [n]) v_i (A_i)
+  $
+]
+#thm[
+  If $
+  A in arg max_(B in Pi_m (m)) op("SW")(B)
+  $
+  then $A$ is PO.
+]
+#proof[
+  If $A$ is not PO, we can just switch the goods around and end up with higher valuation for some agents and hence, a higher social welfare which contradicts the maximality of social welfare.
+]
+
+So can we get a *EF1 + PO*? Trying to do pareto switches to EF1 doesn't work as:
+
+$
+mat(A\:, 1, 1 , dots, 1; B\:, 1, 1 , dots, 1, C\:, 0, 0 , dots, 0)
+$
+here the allocation $A_1 = {1,2,dots,10}, A_2 = {11,12,dots, 20}, A_3 = {21,22,dots,30}$ is EF but making pareto switches wull make it extremely envy prone.
+
+Does the round robin algorithm work?
+$
+mat(A\:, boxed(2),2,boxed(2),2; B\:, 10,boxed(1),1,boxed(1))
+$
+This is not pareto optimal as switching $10 <-> 2$ and $2 <-> 1$ can be done.
+
+Does Envy cycle agent elimination work?
+$
+mat(A\: boxed(10), 5, boxed(1), 1; B\: 1,boxed(1),5,boxed(10))
+$
+
+but this is not PO as switching $5 <-> 1$ and $1 <-> 5$ can be done.
+
+So does a EF1 + PO allocation even exist?
+
+#definition(title: "Nash Social Welfare")[
+  $
+  op("NSW")(A) = (product_(i in [n]) v_i (A_i))^(1/n)
+  $
+]
+#definition(title: "Nash Optimal")[
+We say $A$ is Nash Optimal if it is the largest set of agents $S$ who can simultaneously get positive values and take such a division which maximizes the geometric mean amoung $S$.
+]
+
+Working in an instance where $m >= n$ where $forall i in [n], forall g, v_i (g) > 0$.
+
+#lem[
+  If $A$ is Nash optimal then:
+  + $A$ is PO
+  + $A$ is EF1
+]
+#proof(title:"Proof of (1).")[
+Suppose not. Say $B succ A$ then the set of people with non-zero utility in $B$, say $S' supset.eq S$ which is the set of peple with non zero utility in $A$. Thus,
+$
+op("NSW")(B) = product_(i in S') v_i (B_i) > product_(i in S) v_i (B_i)  >= product_(i in S) v_i (A_i)
+$
+which is a contradiction.
+]
+#proof(title:"Proof of (2).")[
+  Suppose $A$ is Nash optimal but not EF1.
+
+  That is $exists i, j$ such that
+  $
+  forall g in A_j v_i (A_i) < v_i (A_k - g)
+  $
+
+  Let $
+  g^* = arg min_(g in A_k\ v_i (g) > 0) (v_k (g))/(v_i (g))
+  $
+
+  Construct a new allocation whith everything same but $v_i (B_i) = v_i (A_i) + v_i (g^*)$ and $v_j (B_j) = v_j (A_j) - v_j (g^*)$.
+
+  We claim
+
+  $
+  (op("NSW")(B))/(op("NSW")(A)) > 1\
+  <==> v_i (B_i) v_j (B_j) > v_i (A_i) v_j (A_j)\
+  <==> [v_i (A_i) + v_i (g^*)][v_j (A_j) - v_j (g^*)] > v_i (A_i) v_j (A_j)\
+  <==> v_i (A_i) v_j (A_j) + v_i (g^*) v_j (A_j) - v_i (A_i) v_j (g^*) - v_i (g^*) v_j (g^*) > v_i (A_i) v_j (A_j)\
+  <==> 1 + (v_i (g^*))/(v_i (A_i )) -  (v_j (g^*))/(v_j (A_j)) - (v_i (g^*) v_j (g^*))/(v_i (A_i) v_j (A_j)) > 1\
+  <==> v_j (A_j) > (v_j (g^*))/(v_i (g^*)) [v_i (A_i) + v_i (g^*)] quad "(by Vishwa bhaiya claims this to be true)"\
+  $
+  From the choice of $g^*$,
+  $
+  (v_j (g^*))/(v_i (g^*)) = theta\
+  => (v_j (g))/(v_i (g)) >= theta\
+  => v_j (g) >= theta v_i (g)
+  $
+  Using this,
+  $
+  (v_j (A_j))/(v_i (A_j)) >= theta =  (v_j (g^*))/(v_i (g^*))
+  $
+  Using envy freeness,
+  $
+  v_i (A_i) < v_i (A_j) - v_i (g^*)\
+  v_i (A_i) + v_i (g^*) < v_i (A_j)\
+  $
+
+  We can multiply these to get
+
+  $
+  v_j (A_j) > (v_j (g^*))/(v_i (g^*)) [v_i (A_i) + v_i (g^*)] 
+  $
+  leading to a contradiction and completing the proof.
+]
+
+While NSWO is gurenteed to exist, it is NP hard to find and even hard to approximate. The question if EF1+PO can be done in poly time is open.
