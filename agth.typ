@@ -64,9 +64,8 @@ This is called Braess's Paradox.
   Furthermore, Steinberg and Zangwill, 1983; showed that in a random network, Braess's paradox is approximately $50%$ likely to occur in an random network.
 
   It is also a consideration in google maps where the navigation sometimes suggests a longer route, not to avoid a pre-existing traffic jam, but to avoid creating one. (This is why google map is not referentially transparent and may suggest two people different routes between same places at same time)
-
-  #todo[]
 ]
+We also would like to define the term 'cost of anarchy' here which refers to the ratio of equilibrium payouts (or cost) divided by optimal payouts(or cost). In this case, anarchy was $2/1.5 = 4/3$ times costlier.
 == Prisoner's Dilemma
 #nfg(
   players: ("P1", "P2"),
@@ -188,7 +187,7 @@ There is no pure Nash equilibrium here. But allowing randomized strategy, we can
   For zero-sum games, it is polytime; otherwise, it is PPAD-hard.
 ]
 
-PPAD-hard $=>$ NP-Hard $<==>$ NP $=$ co-NP. This is open and unknown.
+PPAD-hard $=>^?$ NP-Hard $<==>$ NP $=^?$ co-NP. This is open and unknown.
 
 == Sealed Bids Auctions
 There is one seller and $n$ buyers and one item that the seller wants to sell.
@@ -211,7 +210,19 @@ In first price auction, $t_i = b_i$.
   Second price auction is weakly revealing (that is it is a weakly dominant strategy to bid truthfully).
 ]
 #proof[
-  We will analyze for $v_i$ and then see that the same holds with small changes.
+  In such an auction setting (regret less, envy less, fee less auctions), our payoff is zero unless we win.
+
+  What agents are hence trying to avoid is the so called 'winner's curse. Hence, we can restrict the analysis to bidding as if we know we will win.
+
+  In that case, bidding your value is weakly dominant as if everyone is bidding their value; you can't do better by 
+  
+  - bidding lower than your value, $tilde(v) < v$, as another agent may have valuation $v^*$ such that $tilde(v) < v^* < v$ and will now win instead of you.
+  - bidding above your valuation, $tilde(v) > v$, as another agent may have valuation $v^*$ such that $tilde(v) > v^* > v$ and you will win instead of them; However, with the winners curse.
+]
+#note[
+  This is the only weakly dominent equilibrium. Although, this is by far not the only nash equilibrium. $(v_1, 0, dots, 0)$ is a NE; $(v_2, v_1, 0, dots, 0)$ is a NE; and so on.
+
+  This is called a Bayesian Nash Equilibriium as given our beliefs of the nature of the world, this maximizes our payoff. (Here the belief is that all valuations (in some radius around ours) are likely and that we may win).
 ]
 
 == Battle of the Sexes
@@ -496,7 +507,7 @@ Minimize $2 y_1 + 4y_2 + 5y_3$ with the constraints:
   The Row player LP and Column player LP are duel pairs.
 ]
 #proof[
-  #todo[Computation]
+  DIY. It's just transposing stuff here and there.
 ]
 
 == Strong Duality
@@ -579,7 +590,7 @@ sum_(k=1)^m f_(i k) (sigma) = 1
 $
 
 We will define $
-f(sigma) = := rho\
+f(sigma) := rho\
 f(sigma)= f(sigma_(11), dots, sigma_(1 m), dots, sigma_(n 1), dots sigma_(n m) )\
 = (rho_1, dots, rho_(1m), dots, rho_(n 1), dots, rho_(n m)).
 $
@@ -962,8 +973,10 @@ where the equilibria from Nash onwards are gurenteed to exist and Corealated is 
 #example()[
   In making a cricket tournament, we don't want players to lose on purpose to get an easier opponent later and have better medal odds.
 
-  A faliure of this was the 2016 Rio Olympics where the mixed badminton was structured so badly that both teams were trying to lose in an extremely hard to watch match.
-]
+  A faliure of this was the 2012 London Olympics where the women's badminton doubles was structured so badly that both teams were trying to lose in an extremely hard to watch match. Search "Wang Xiaoli / Yu Yang (CHN) vs Ha Jung-eun / Kim Min-jung (KOR)" if you want to see the match, the refree being tense and the crowd booing.
+
+  They were later disqualified for unsportsperson like behavior. Although, trying to win by all legal means is sportsperson like in my book. Maybe they should have set the tournament better to never let this be incetivized in the first place.
+  ]
 
 Mechanism design is used to design tournaments, voting schemes and schemes to divide stuff.
 
@@ -990,10 +1003,11 @@ Mechanism design is used to design tournaments, voting schemes and schemes to di
 ]
 #prob[
   Envy Free Cake Division with 3 agents
-]
-#prob[Given an apartment with $n$ rooms and rent $k$, we want to divide the apartment between $n$ roomates with valuation functions $v_i : [n] times [0,k] -> [0,1]$.]
+]<cake-cutting>
+#prob[Given an apartment with $n$ rooms and rent $k$, we want to divide the apartment between $n$ roomates with valuation functions $v_i : [n] times [0,k] -> [0,1]$.]<rent-division>
 == Detour: Sperner's Lemma
 #definition(title: "Sperner Coloring on Triangles")[
+  #image("agth-pics/sperner-big.png")
   Given a triangle $A B C$ divided into triangles, a coloring of vertices such that
   - Each of the three vertices $A$, $B$, and $C$ of the initial triangle has a distinct color.
   - The vertices that lie along any edge of triangle $A B C$ have only two colors, the two colors at the endpoints of the edge. For example, each vertex on $A C$ must have the same color as $A$ or $C$. 
@@ -1020,6 +1034,7 @@ Mechanism design is used to design tournaments, voting schemes and schemes to di
 #definition(title:"Facet")[
   Choosing $n$ vertices from a $n+1$-simplex is called a facet.
 ]
+#figure(image("agth-pics/sperner-tetra.png"), caption: [Sperner Tetrahedron])
 #definition(title: "Sperner Coloring")[
   Given a $n$ simplex divided into $n$ simplices, we call a coulering Sperner if:
   - Each of the boundry vertices of the initial simplex has a distinct color.
@@ -1040,9 +1055,13 @@ Mechanism design is used to design tournaments, voting schemes and schemes to di
 
   We will now induct on $n$.
 
+  #figure(image("agth-pics/sperner-1d.png"), caption: [Proof for 1D case])
+
   (B) For $1$ simplex, We are obviously done as $1-2$ rainbow will be there.
 
   (S) Let Sperner hold for $n-1$ simplex.
+
+  #figure(image("agth-pics/sperner-2dproofvis.png"), caption: [Visualization for the inductive step in 2D])
 
   For an $n$ simplex, The $n$ facet is $n-1$ simplex and by induction, we will have odd number of doors via Sperner.
 
@@ -1055,15 +1074,76 @@ Mechanism design is used to design tournaments, voting schemes and schemes to di
   Thus, we have odd number of rainbow rooms, proving the Sperner's Lemma.
 ]
 == Back to Fair Division
+=== Cake-Cutting Problem
+We will solve a general version of @cake-cutting also called the cake-cutting problem. For $n$ agents, We consider any $n−1$ vertical cuts parallel to the side of the cake, dividing the cake into $n$ pieces. Such a way of cutting is called a cut-set. 
+#idea[
+Observe that in a particular cut-set, if we ask all players which part do they prefer and get all different answers, then that cut-set gives an envy-free division (because every one gets the piece he/she prefer the most). We will use Sperner’s lemma to prove that there must exists such cut-set, as well as finding one.
 
-#soln[
-  Let's start by solving 3-EFX via Sperner
-
-  #todo[Nice image and stuff]
+The idea is that Sperner allows us to gurentee that there is a triangle part with all vertices of different color. So given continuity aka small change in cut-set causes small change in preference; we can make a Sperner coloring of the linear programming simplex and get an approximate. Tha's exactly what the solution is.
 ]
 
+#soln[
+  Consider every possible cut-set that divides the cake into $n$ (maybe empty) pieces. Let $x_i$ be the proportion of ith leftmost part. We have $x_1 + x_2 + dots + x_n = 1$ and $x_i >= 0$ for every $i = 1, 2, dots , n$.
+  
+  In the $n$-dimensional space, consider a polytope formed by linear programmming  $x_1 + x_2 + dots + x_n = 1$ and $x_i >= 0$ for every $i = 1, 2, dots , n$. The resulted polytope is a regular $(n − 1)$-simplex.
+  
+  Then, we triangulate that simplex into smaller regular $(n − 1)­$ simplices with each having side length less than $epsilon$, for a small enough $epsilon$, as well as writing numbers $1, 2, dots, n$ on the vertices in a way that every elementary $(n − 1)$-simplex has vertices with all different numbers.
 
-#todo[Lecture on 19 th]
+  #example[
+    #image("agth-pics/ef-continous-example.png")
+    In that figure, the resulted polytope is a regular triangle (regular $2$-simplex). We then divide it into $k^2$ smaller regular triangles, for some integer $k$ as big as we want. Then, we write a number on each vertex $1, 2, 3$ in a cyclic order such that every elementry triangle has all three vertices with different numbers.
+  ]
+
+  Then, at each vertex with coordinates $(x_1, x_2,dots, x_n)$ with number $i$, we ask player $i$ that which piece of cake that he/she prefers if the sizes of pieces of cake is $x_1, x_2,dots, x_n$, respectively. We then color that vertex according to the answer.
+
+  #example[
+    We ask player 1 that if the sizes of three pieces are $0, 0,$ and $1$, respectively, which piece does he/she prefer. We then color that vertex according to the answer.
+  ]
+  
+  Observe that, in each of the $k$-dimensional face of the polytope, one ore more of the coordinates must be zero.
+
+  #example[
+    The second coordinate along the left edge of the triangle is always zero, hence, no one chooses that piece.
+  ]
+
+  As, no people prefer the piece with size zero, so the color of vertices on each face must be the same as one of the corners of that face. Therefore, the color labeling of vertices in the simplex is a Sperner labeling.
+
+  By Sperners’ lemma, there must be at least one elementery $(n − 1)$­ simplex that has vertices with different colors. We then divide the cake by the cut-set represented by any interior point of that $(n−1)$-simplex.
+  
+  Since the size of each elementry simplex is less than $epsilon$, by the continuous preference assumption, all people will be satisfied with that cut-set.
+  ]
+
+  The algorithm this solution leads to is named *Simmons’ Algorithm* as it was devloped by Forrest Simmons in 1980.
+
+=== Harmounious Rent Problem
+We will now look into solving @rent-division using Sperner’s lemma.
+
+One possible attempt is to consider every possible assignment of price to each bedroom. i.e. set the price of room $i$ to be $x_i$ such that $x_1 + x_2 + dots + x_n = S$, when $S$ is the total price of the apartment, and $x_i >= 0$ for every $i = 1, 2, dots , n$. 
+
+Then, we consider the $(n − 1)­$ simplex obtained from the linear programming and color it like in the cake-cutting problem. 
+
+However, this problem is different from the cakecutting problem in one aspect. In the cake-cutting problem, the bigger the piece of cake is, the higher chance people will want it; however, in this problem, the higher the price of a room is, the lower chance people will want that room. This would mean our simplex could look like:
+
+#image("agth-pics/ef-rent-coloring.png", height: 40%)
+
+#idea[
+  If we could comehow turn every corner into a face and every face to a corner, we would be done.
+
+  Can that be done?
+]
+Yes. We transform each $k$ face to $n-k-1$ face (for a $n$ simplex).
+#figure(image("agth-pics/spener-duel.png"), caption:[We have marked the vertices, points on line and colored an elementry cell to show how it transforms.])
+
+ Let the triangulation of $S^∗$ inherit a labelling via this correspondence with $S$. One may now verify that the labelling of $S^*$ is a Sperner labelling! Hence,there exists a fully labelled elementary simplex of $S^*$, which corresponds to a fully
+labelled elementary simplex of $S$, as desired. We can now present the solution.
+
+#solution[
+A constructive algorithm is obtained by following “trap-doors” in Sperner’s lemma. Choose an $epsilon$ smaller than the rental difference for which housemates wouldn’t care (a penny?). Following trap-doors corresponds to suggesting pricing schemes and then asking various players, “Which piece would you choose if the rooms were priced like this?” Once a fully labelled elementary simplex is found, any point inside it corresponds to an $epsilon$-approximate rent-partitioning.]
+
+However, we can also solve this without ever needing to go through this dualization process.
+#solution[
+Each person first pays the full rent price and then assigns to each room a “rebate” price that a person who takes that room will get. Then, we can use Simmons’ Algorithm to assign rooms to people.
+]
 
 == Fair Division of indivisible goods
 
@@ -1118,7 +1198,7 @@ Note, PO always exists and the proof if by the fact that giving everything to th
 So can we get a *EF1 + PO*? Trying to do pareto switches to EF1 doesn't work as:
 
 $
-mat(A\:, 1, 1 , dots, 1; B\:, 1, 1 , dots, 1, C\:, 0, 0 , dots, 0)
+mat(A\:, 1, 1 , dots, 1; B\:, 1, 1 , dots, 1; C\:, 0, 0 , dots, 0)
 $
 here the allocation $A_1 = {1,2,dots,10}, A_2 = {11,12,dots, 20}, A_3 = {21,22,dots,30}$ is EF but making pareto switches wull make it extremely envy prone.
 
