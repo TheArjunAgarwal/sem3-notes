@@ -1146,22 +1146,253 @@ Each person first pays the full rent price and then assigns to each room a “re
 ]
 
 == Fair Division of indivisible goods
+#definition(title: "Fair Division Setting")[
+  Given a set of agents $[n] = {1 dots n}$, set of items/resources $Z = {z_1, z_2, dots, z_m}$ and set of utility functions $mu$ such that $v_i : op("pow")(Z) -> RR$ for agent $i$.
 
-#todo[Some indivisible Fair Division Stuff]
+  A division is an allocation of items $(A_1, A_2, dots, A_n)$ such that $union.big_(i in [n]) A_i = Z$ and $forall i != j, A_i inter A_j = emptyset$.
+]
+We have types of valuations such that
+#definition(title: "Valuations")[
+  - *Additive* : $v_i (S) = sum_(z in S) v_i (z)$
+  - *Subadditve* : $v_i (S union T) < v_i (S) + v_i (T)$ where $S inter T = emptyset$
+  - *Submodular*: $v_i (S union) + v_i (S inter T) <= v_i (S) + v_i (T)$
+  - *Supramodular*: $v_i (S union) + v_i (S inter T) >= v_i (S) + v_i (T)$
+]
 
-As we have shown, in divisible case, EF allocation always exists.
+We normally make a *normalization* assumption that is $forall i, v_i (emptyset) = 0$. A stronger assumption which is sometimes made is called *strong normalization*#footnote[Non-standard term! Borrowed from Prof. Palavi Jain or Prof. Sushmita Gupta during COMSOC-2025 at IIT Jodhpur.]  where $v_i (Z) = 1$.
 
-In indivisible goods, EF might not always exist. For example, *2 agents 1 good*.
+Another standardized assumption is *monotonicity* that is $forall S subset.eq T, v_i (S) <= v_i (T)$.
 
-However, we can do EF1 in P.
+Assuming the valuations to be *Additive* is also a rather common assumption. We make it, unless stated otherwise.
 
+We now we ask, what is fair?
+=== Propotional Division
+#definition(title: "Proptional")[
+  If for all agents $i in [n], v_i (A_i) >= 1/n$, then the division satisfies *PROP*.
+
+  We are making the strong normalization assumption here.
+]
+As we will show, PROP is possible for the divisible case (recall that the continuity condition for valuations in divisible settings imply additvity). 
+
+However, it may not be possible for indivisible goods. Consider 2 agents and 1 item.
+#remark[
+  The 2 agent, 1 item case is a common counter example for indivisible fair division. It's genralization $n$ agents, $n-1$ items is also a counter example in many cases.
+]
+#psudo(title: "Moving Knife Algorithm (PROP for divisible goods with continous valuation)")[
+  + We move a knife from left to right over a cake
+  + As soon as the valuation is $1/n$ for an agent, they call stop.
+  + We cut cake here.
+  + The agent who calls stop is given the piece.
+  + Continue with rest of cake and agents
+]
+#proof(title:"Proof of correctness")[
+  All agents other than the last one call stop when they got a piece with proptional share.
+
+  For the last agent, we know that $v_n ([0,1]) = 1$. Let $A = (A_1, dots, A_n)$ be the allocation vector.
+  Then,
+  $
+  sum_(i in [n]) v_n (A_i) = v_n ([0,1]) = 1\
+  $
+  $
+  "Notice," forall i in [n-1], v_n (A_i) < 1/n "as otherwise agent would have called stop"\
+  => sum_(i in [n-1]) v_n (A_i) < (n-1)/n\
+  therefore sum_(i in [n-1]) v_n (A_i) + v_n (A_n) = 1\
+  => v_n (A_n) > 1/n
+  $
+]
+
+Would such an algorithm work for the indivisible case (given additive valuations)?
+
+#psudo(title:"Bag Filling Alogorithm")[
+  + Add items to a bag till an agent says stop.
+  + Give bag to agent and continue.
+]
+Why would this not work? Because unlike the above case where $v_i (A_i) = 1/n$ for all but last agent(they can have better aswell); here $v_i (A_i) >= 1/n$ and $forall z in A_i, v_i (A_i backslash z) < 1/n$. 
+
+So can we modify it to maybe work? Not really as PROP is not gurenteed to exist. We can instead modify it to work for *PROP1*.
+#definition(title: "PROP1")[
+  An allocation is *PROP1* if and only if
+  $
+  forall i in A_i, exists z in Z backslash A_i "s.t." v_i (A_i) + v_i(z) >= 1/n
+  $
+
+  This can be genralized to *PROPc* where $c$ is the number of goods we get to add.
+]
+#psudo(title:"Bag Filling Alogorithm")[
+  + Add items to a bag till an agent says stop.
+  + Remove the last item and put it in a special bag
+  + Give bag to agent and continue.
+  + Once $n-1$ bags are given, give special bag to last agent.
+]
+The analysis is similer to the moving knife. We can also modify the algorithm a bit to get *PROPx* (if it exists).
+#definition(title: "PROPx")[
+  An allocation is *PROPx* if and only if
+
+  $
+  forall i in A_i, forall z in Z backslash A_i "s.t." v_i (A_i) + v_i(z) >= 1/n
+  $
+]
+#proof(title: "Counter Example to existence of PROPx")[Consider an example with three agents with identical valuations; three large goods $a$, $a$, $b$; and $10$ small goods $c$. 
+
+Each $a$ brings utility $0.15$ , $b$ brings utility $0.4$, and each $c$ brings $0.03$.
+
+Check that, if Agent 1 gets only $c$s, and Agent 2 gets $b$, then PROPx fails.
+
+However, PROPx also fails for Agent 1 who gets at most nine $c$s. If Agent 1 gets $b$, while Agents 2 and
+3 get one $a$ each, then one of Agents 2 and 3 gets at most five $c$s (otherwise $a$ fails the EFX) and a total utility of $0.3$, so PROPx fails again.
+]
+#remark[
+  The counter example was though of with $a$ with value $3/2$, $b$ with $4$ and $c$ with $3/10$ and then scalled to the case.
+
+  This is another common counter example idea to make things almost equal but then divide it into parts.
+]
+#remark[
+  Bag filling is a common approximation algorithm. It and it's modifications can be used to approximate a lot of bound based allocations. So keeping it in the back of mind is a good idea.
+]
+
+=== Envy Free Allocation
+Recall, we discussed this for the divisible case and saw it always exists.
+#definition(title: "EF")[
+  An allocation is *EF* if and only if
+  $
+  forall i, j in [n] v_i (A_i) >= v_i (A_j)
+  $
+
+  We don't make the strong normalization here.
+]
+It doesn't always exist (2 goods, 1 agent counter example).
+#thm[
+  $"EF" => "PROP"$ but $"PROP" arrow.r.double.not "EF"$
+]
+#proof[
+  FTSOC, let there be some EF allocation which is not PROP. That means there is some agent $i$ such that $v_i (A_i) < (v_i (Z))/n$. But,
+  $
+  sum_(j in [n]) v_i (A_j) = v_i (Z)\
+  => sum_(j in [n], i != j) v_i (A_i) > v_i (Z) (n-1)/n\
+  => exists j in [n] "s.t." v_i (A_j) > (v_i (Z))/n \
+  => exists j in [n] "s.t." v_i (A_i) < v_i (A_j)
+  $
+
+  which contradicts EF. Thus, our assumption was false and thus, $"EF" => "PROP"$
+
+  As for showing the converse doesn't hold, consider 3 agents and 3 goods with the following allocation.
+  $
+  mat(A\: boxed(1), 2, 2; B\: 2, boxed(1), 2; C\: 2, 2, boxed(1))
+  $
+]
+#thm[
+  Determining if EF exists is NP hard for even 2 agents.
+]
+#proof[
+  Consider the partition problem with set $S = {s_1, s_2, dots, s_n}$. Consider an EF division instance with
+  $
+  mat(A\: s_1, s_2, dots, s_n; B\: s_1, s_2, dots, s_n)
+  $
+  The equivalence in solutions is trivial.
+]
+
+Can we weaken the case?
 #definition(title: "EF1")[
   An allocation is EF1 if for any agents $i,j in [n]$
   $
-  exists g in A_j "s.t."  v_i (A_i) >= v_j (A_i - g)
+  exists g in A_j "s.t."  v_i (A_i) >= v_i (A_j - g)
   $
-  that is agents don't envy each other upto removal of one good (or addition of one chore.)
+  that is agents don't envy each other upto removal of one good.
 ]
+#thm[
+  EF1 always exists
+]
+#proof[
+  #psudo(title: "Round Robin Algorithm")[
+    + Order the agents arbitarily
+    + for $i in [n]$:
+      + if $Z = emptyset$: 
+        + break
+      + sort $Z$ with respect to $v_i$
+      + $g$ = highest item
+      + add $g$ to $A_i$
+      + remove $g$ from $Z$
+    + return $(A_1, A_2, dots, A_n)$
+  ]
+We claim this algorithm gives an EF1 allocation.
+
+If $i < j$, then $i$ got to pick before $j$ every round and can't envy $j$.
+
+If $i > j$, then $i$ can envy $j$ only over the first item as she passed on the other items and doesn't envy wrt to them.
+]
+#remark[
+  Round Robin is also a class of algorithms which do work in a lot of cases.
+]
+#definition(title: "Chore")[
+  A chore is something to be allocated which all agents value negitivly.
+]
+While it is clear that round robin works in only chore case, we can show it works to give an EF1 in a mix of goods and chore case.
+#definition(title: "EF1")[
+  An allocation of goods and chores is EF1 if for any agents $i,j in [n]$
+  $
+  exists g in A_j "s.t."  v_i (A_i) >= v_i (A_j - g)
+  $
+  or 
+  $
+  exists c in A_i "s.t." v_i (A_i - c) >= v_i (A_j)
+  $
+  that is agents don't envy each other upto removal of one good.
+]
+#psudo(title : "Double Round Robin")[
+  + Order agents arbitarily
+  + divide $Z = Z_g union Z_c$ where $Z_g$ is goods and $Z_c$ is chores
+  + Forever:
+    +  for $i in [n]$:
+        + if $Z_c = emptyset$: 
+          + break
+        + sort $Z$ with respect to $v_i$
+        + $c$ = highest item
+        + add $c$ to $A_i$
+        + remove $c$ from $Z_c$
+  + Forever:
+    + for $i$ in ${n, n-1, dots, 1}$:
+      + if $Z_g = emptyset$: 
+          + break
+      + sort $Z$ with respect to $v_i$
+      + $g$ = highest item
+      + add $g$ to $A_i$
+      + remove $g$ from $Z$
+]
+Showing this works is not very hard and the proof is almost identical to the goods only case.
+
+We will now also discuss another algorithm which works when valuations are not additive, only monotonicity is given. We first show round robin doesn't work in this case.
+
+Consider 2 agents with valuations over $A, B, C, D, E$ as $5,4,3,2,1$. By round robin, $1$ ends up with $A,C,E$ and $2$ with $B,D$. Setting valuations of ${A,C}, {C,E}$ and ${A,E}$ to be higher than ${B,D}$ is easy.
+
+Someone may sugest choosing the best thing to add. Constructing a counterexample for that using the same idea is not hard.
+
+So what do we do now?
+
+#definition(title: "Envy Graph")[
+  An envy graph is a graph in which each vertex represents an agent along with its partial allocations. There is a directed edge from vertex $i$ to vertex $j$ if agent $i$ envies agent $j$ under the current partial allocation.
+]
+
+#definition(title: "Envy Cycle")[
+  An envy cycle is a directed cycle in the envy graph
+]
+
+#definition(title: "Source")[Source node is a node in the envy graph that does not have any
+incoming edges.]
+
+#psudo(title : "Envy Cycle Elimination")[
++ while there is an unallocated object $X$:
+  + there is an unallocated object $X$
+  + if the envy graph has a source vertex $v$ then
+    + Allocate $X$ to $v$
+  + else
+    + Resolve cycles until a source vertex shows up
+]
+
+Resolving a cycle here is just moving a good from a person to another person till the cycle is not there. As we give out one good at a time, the envy at the end is all upto $1$ and hence, EF1 is achived.
+
+It is easy to show that the number of edges strictly decrese after reduction. This implies we make atmost $O(n^2)$ cycle reductions. Thus, the algorithm is polytime.
+
+=== Pareoto Optimality
 
 #definition(title: "Pareto")[
   An allocation $A succ B$ if
