@@ -220,9 +220,9 @@ In first price auction, $t_i = b_i$.
   - bidding above your valuation, $tilde(v) > v$, as another agent may have valuation $v^*$ such that $tilde(v) > v^* > v$ and you will win instead of them; However, with the winners curse.
 ]
 #note[
-  This is the only weakly dominent equilibrium. Although, this is by far not the only nash equilibrium. $(v_1, 0, dots, 0)$ is a NE; $(v_2, v_1, 0, dots, 0)$ is a NE; and so on.
+  This is the only weakly dominant equilibrium. Although, this is by far not the only nash equilibrium. $(v_1, 0, dots, 0)$ is a NE; $(v_2, v_1, 0, dots, 0)$ is a NE; and so on.
 
-  This is called a Bayesian Nash Equilibriium as given our beliefs of the nature of the world, this maximizes our payoff. (Here the belief is that all valuations (in some radius around ours) are likely and that we may win).
+  This is called a Bayesian Nash Equilibrium as given our beliefs of the nature of the world, this maximizes our payoff. (Here the belief is that all valuations (in some radius around ours) are likely and that we may win).
 ]
 
 == Battle of the Sexes
@@ -274,7 +274,7 @@ mu_i (p_1, p_2, dots, p_n) &= sum_((s_1, dots, s_n) in S_1 times dots times S_n)
 &=  sum_(s_i in S_i) p_i (s_i) sum_(s_(-i) in S_(-i)) p_(-i)(s_(-i)) mu_i (s_i, s_(-i))\
 &=  sum_(s_i in S_i) p_i (s_i) mu_i (s_i, p_(-i) ) \
 $
-This makes the utility of a player a convex combination of thier pure stratergy payoffs.
+This makes the utility of a player a convex combination of their pure strategy payoffs.
 
 #definition(title : "Convex Combination")[
   A convex combination of $a_1, a_2, dots, a_n$ is $sum_(i=1)^n lambda_i a_i$ where $lambda_i in [0,1]$ and $sum_(i=1)^n lambda_i  = 1$.
@@ -282,7 +282,7 @@ This makes the utility of a player a convex combination of thier pure stratergy 
 
 An obvious observation is that convex combination of $a_1, dots, a_n <= max {a_i}$.
 
-Which implies that the payoff with mixed stratergy is less than equal to max payoff with a pure strategy $s_i$. This implies:
+Which implies that the payoff with mixed strategy is less than equal to max payoff with a pure strategy $s_i$. This implies:
 $
 max_(sigma_i in Delta(S_i)) mu_i (sigma_i, sigma_(-i)) = max_(s_i in S_i) mu_i (s_i, sigma_(-i))
 $
@@ -355,7 +355,7 @@ Another way to argue the same is $mu_1((A+B)/2, s_(-i)) > mu_1(C,s_(-i))$.
   [2,4],[5,5],[2,3],
   [8,1],[3,2],[0,0]
 )
-We can get the gurentee finding the nash equilibrium by identifying the highest entry per row and column wrt the respective players.
+We can get the guarantee finding the nash equilibrium by identifying the highest entry per row and column wrt the respective players.
 #nfg(
   players: ($P_1$, $P_2$),
   s1:($A$,$B$,$C$),
@@ -391,16 +391,16 @@ In these games, we only need to specify the payoffs for one player. We, by conve
   [-1],[1],[2],
   [1],[0],[1]
 )
-For any stratergy,  $i$ of $P_1$ and $P_2$ will choose a stratergy such that,
-- $P_1$ chooses $max_i min_j a_(i j)$ (maxmin)
-- $P_2$ will choose $min_j max_i a_(i j)$. (minmax)
+For any strategy,  $i$ of $P_1$ and $P_2$ will choose a strategy such that,
+- $P_1$ chooses $max_i min_j a_(i j)$ (maximin)
+- $P_2$ will choose $min_j max_i a_(i j)$. (minimax)
 
-If maxmin and minmax are equal, we are done and the value is the nash equilibrium.
+If maximin and minimax are equal, we are done and the value is the nash equilibrium.
 
-#definition(title: "Maxmin-Minmax")[
-  The maxmin value refers to $max_(i in S_1) min_(j in S_2) a_(i j)$.
+#definition(title: "Maximin-Minimax")[
+  The maximin value refers to $max_(i in S_1) min_(j in S_2) a_(i j)$.
 
-The minmax value refers to $min_(j in S_2) max_(i in S_1) a_(i j)$.
+The minimax value refers to $min_(j in S_2) max_(i in S_1) a_(i j)$.
 ]
 
 If a PSNE exists, we will get it by this process.
@@ -428,17 +428,17 @@ We can also discuss Saddle points.
   And we are done by squeeze theorem.
 ]
 
-#definition(title:"Mixed Stratergy in 2 player zero sum game")[
+#definition(title:"Mixed Strategy in 2 player zero sum game")[
   Let $|S_1| = m$ and $|S_2| = m$. Let $x = (x_1, x_2, dots, x_n)$ be a mixed strategy for $P_1$ and $y = (y_1, y_2, dots, y_n)$ be a mixed strategy for $P_2$.
 
   The expected payoff is $sum^n_(i=1) sum^m_(j=1) x_i y_j a_(i j) = x^T A y$
 ]
 
-We can define maxmin and minmax values here as:
-#definition(title:"Maxmin-minmax")[
-  maxmin value = $max_(x in Delta(S_1)) min_(y in Delta(S_2)) x^T A y$
+We can define maximin and minimax values here as:
+#definition(title:"Maximin-minimax")[
+  maximin value = $max_(x in Delta(S_1)) min_(y in Delta(S_2)) x^T A y$
 
-  minmax value = $min_(y in Delta(S_2)) max_(x in Delta(S_1)) x^T A y$
+  minimax value = $min_(y in Delta(S_2)) max_(x in Delta(S_1)) x^T A y$
 ]
 
 #lem[
@@ -527,11 +527,11 @@ $
 This is a nash equilibrium as no player can unilaterally increase payoff by moving.
 
 == Existence of Nash Equilibrium (mixed) in finite strategic form games
-Ler $(N, <s_i>, <mu_i>)$ be the game where $N = {1,2,dots,n}$, $S_i$ is stratergy set for player $i$, with $|S_i| = m forall i$ and and $mu_i : S_i times S_(-i) -> RR$ is the payoff function for player $i$.
+Ler $(N, <s_i>, <mu_i>)$ be the game where $N = {1,2,dots,n}$, $S_i$ is strategy set for player $i$, with $|S_i| = m forall i$ and and $mu_i : S_i times S_(-i) -> RR$ is the payoff function for player $i$.
 
 Mixed strategy $sigma_i$ is a probability distribution over $S_i$.
 
-$Delta_i$ of $Delta(S_i)$ denotes the set of all mixed stratergies for player $i$. $Delta = Delta_1 times Delta_2 times dots times Delta_m$.
+$Delta_i$ of $Delta(S_i)$ denotes the set of all mixed strategies for player $i$. $Delta = Delta_1 times Delta_2 times dots times Delta_m$.
 
 Expected payoff from $delta_i$ for player $i$ is
 $
@@ -547,7 +547,7 @@ $
 #thm(title:"Brouwer's Fixed Point Theorem")[
   Let $B$ be a closed, bounded convex set. Let $f :: B -> B$ be a continuous function, then $exists x in B op("s.t.") f(x) = x$
 ]
-We want to define $B, f$ such that the Nash Equilibriium is the fixed point of $f$. Define $B = Delta$.
+We want to define $B, f$ such that the Nash Equilibrium is the fixed point of $f$. Define $B = Delta$.
 
 Define $f$ such that $sigma in Delta$ is not a NE then $f(sigma) != sigma$ NS IF $sigma^*$ is a NE then $f(sigma^*) = sigma^*$.
 
@@ -668,7 +668,7 @@ $
 x_i^* &= 0 quad "or" quad  (R y^*)_i &= 1 quad &forall i in [n]\
 y_i^* &= 0 quad "or" quad  (x^*^T C)_i &= 1 quad &forall i in [m]
 $
-The idea is that instead of the payoff's being variabales, we can sort of normalize them to $1$ and then make a system of linear equations using it. This will 
+The idea is that instead of the payoff's being variables, we can sort of normalize them to $1$ and then make a system of linear equations using it. This will 
 
 #definition(title : "Polytope, Polyhedron, Half-Space, Vertex")[
   A bounded *polyhedron* is *polytope*.
@@ -688,7 +688,7 @@ We are assuming non-degeneracy here.
 #definition(title : "Non-Degeneracy")[
   Any set of $ >m+n$ constraints do not meet at one point.
 ]
-While the polytope itself doesn't define nash equilibria but some of it's vertex do. We will hop from vertex to vertex upto some condition to get nash equilibria.
+While the polytope itself doesn't define nash equilibria but some of it's vertex do. We will hop from vertex to vertex up to some condition to get nash equilibria.
 
 At Nash equilibrium, by the stability condition, $n$ of the equations in 
 
@@ -702,7 +702,7 @@ Thus, $m+n$ many equalities the NE must have. That implies NE is a vertex of $P$
 
 The vertex $x,y = (arrow(0)_n, arrow(0)_n)$ is not a NE. This is called an artificial equilibrium.
 
-A vertex $x>0$ $R y_i < 1$ but $x_2 = 0, R_2 y = 1, dots$ is not a NE. Stratergy $1$ has $+$ve prov but not max payoff.
+A vertex $x>0$ $R y_i < 1$ but $x_2 = 0, R_2 y = 1, dots$ is not a NE. Strategy $1$ has $+$ve prov but not max payoff.
 
 Let $(hat(x), hat(y))$ be a vertex. Define a set of labels for each vertex. Define a set of labels for each vertex $(hat(x), hat(y))$ has a label $i in [n]$ if either $x_i = 0$ or $R_i y = 1$. Also $(hat(x), hat(y))$ has a label $n+j$ if $y_2 = 0$ or $x^T C^((j)) = 1$.
 
@@ -737,7 +737,7 @@ At any point, say $t$ if $(x_t, y_t)$ have all the labels, output it as a NE.
   The odds in a mixed nash equilibrium are rational.
 ]
 
-== Mixed Nash Equilibriium in 2 Player Games
+== Mixed Nash Equilibrium in 2 Player Games
 $N = {1,2}, S_1 = [n], S_2 = [m]$ with payoff matrices $R,C$.
 
 Characterization of MNE is
@@ -782,13 +782,13 @@ As with most problems in computer science, we want to know how hard it is. After
 The problem in showing that it is NP lies in the definition of NP itself.
 
 #definition(title: "NP")[
-  NP is a class of decision problems with yes/no answer and there exists a polytime verifiable certicificate for a yes answer.
+  NP is a class of decision problems with yes/no answer and there exists a polytime verifiable certificate for a yes answer.
 ]
 Our problem is not a decision problem. So what do we do?
 #definition(title: "Functional NP (FNP)")[
   If there is a certificate (solution), output one.
 
-  Note, the certicificate should be polytime verifiable.
+  Note, the certificate should be polytime verifiable.
 ]
 Clearly, MNE $in$ FNP. So can we show MNE is FNP-Complete.
 #thm[
@@ -798,17 +798,17 @@ Clearly, MNE $in$ FNP. So can we show MNE is FNP-Complete.
   It is believed that NP $!=$ co-NP, not as strongly as P $!=$ NP but strongly enough. It is still open nonetheless.
 ]
 #example[
-  Take your favorite NP-complete problem. The instructor took Hamililtonian Path.
+  Take your favorite NP-complete problem. The instructor took Hamiltonian Path.
 
-  Let's there be a reduction from Hamililtonian Path to MNE. 
+  Let's there be a reduction from Hamiltonian Path to MNE. 
   
-  Input will be a graph $G$ in which we want to compute the Hamililtonian path.
+  Input will be a graph $G$ in which we want to compute the Hamiltonian path.
 
   Reduction will be something that takes a graph $G$ and converts it into an instance of 2-Player Game $Gamma$ with the property: 
   
-  $G$ has a Hamililtonian path $<==>$ $Gamma$ has a MNE which maps back to "yes"
+  $G$ has a Hamiltonian path $<==>$ $Gamma$ has a MNE which maps back to "yes"
 
-  $G$ has no Hamililtonian path $<==>$ $Gamma$ has a MNE which maps back to "no"
+  $G$ has no Hamiltonian path $<==>$ $Gamma$ has a MNE which maps back to "no"
 ]
 
 Let's take a slightly less ambitious goal.
@@ -819,10 +819,10 @@ This still doesn't help us out as there are no known TFNP problems.
 
 So we go down to PPAD, a class contained in TFNP.
 #definition(title : "PPAD")[
-  Polynomial Parity Argument Directed version is a complexity class defined by a cannonical problem called the #underline[*end of line*] problem.
+  Polynomial Parity Argument Directed version is a complexity class defined by a canonical problem called the #underline[*end of line*] problem.
 ]
 #definition(title : "End of Line")[
-  Given $G$ possibly exponential sized graph with polytime algorithm (or circuit) to determine neighbours of a given vertex.
+  Given $G$ possibly exponential sized graph with polytime algorithm (or circuit) to determine neighbors of a given vertex.
 
   Every vertex has in-degree $<= 1$ and out-degree $<= 1$.
 
@@ -846,7 +846,7 @@ We will do the first part by an intermediate step called *Sperner Lemma*.
   Sperner's Lemma states that there exists a triangle with all vertices having distinct colors.
 ]
 #definition(title : "Sperner's Lemma Problem")[
-  Given a lattice as an input with the lattice points colored in three colors with every boundry being forbidden to use one color. The intermediate vertices can have any color (from the 3).
+  Given a lattice as an input with the lattice points colored in three colors with every boundary being forbidden to use one color. The intermediate vertices can have any color (from the 3).
 
   We define a triangle as 3 points in the same cell. That is a $1, 1, sqrt(2)$ right angle triangle where lengths are unit.
 
@@ -870,7 +870,7 @@ Some issues with Nash Equilibria are:
 - Payoff at Nash Equilibrium may be much smaller than optimum (cost of anarchy)
 
 #remark[
-  For example, in Prisioner's Dilemma:
+  For example, in Prisoner's Dilemma:
   #nfg(
   players: ("P1", "P2"),
   s1: ($C$, $D$),
@@ -882,7 +882,7 @@ The optimal cases is $-2, -2$ but the Nash equilibrium is $-5, -5$ which makes t
 ]
 
 #prob[
-  Can we circumvent the hardness of Nash Equilibriium by computing say the $epsilon$-Nash Equilibriium?
+  Can we circumvent the hardness of Nash Equilibrium by computing say the $epsilon$-Nash Equilibrium?
 ]
 #definition(title: [$epsilon$-Nash Equilibrium])[
   $(sigma^*_1,dots, sigma^*_n)$ is a $epsilon-$NE if
@@ -1142,12 +1142,12 @@ A constructive algorithm is obtained by following “trap-doors” in Sperner’
 
 However, we can also solve this without ever needing to go through this dualization process.
 #solution[
-Each person first pays the full rent price and then assigns to each room a “rebate” price that a person who takes that room will get. Then, we can use Simmons’ Algorithm to assign rooms to people.
+Each person first pays the full rent price and then assigns to each room a “rebate” price that a person who takes that room will get. Then, we can use Simmons’ Algorithm to assign rooms to people.#footnote[The reason we didn't lead with this is as this fails in the case of where there is a room that nobody wants it even if it is free, someone may end up with that room with a negative price. We normally assume against it, that is called the *no “free closets" assumption* where free closets are rooms in which no one would live, even if free. This solution makes that assumption, while the other one doesn't.]
 ]
 
 == Fair Division of indivisible goods
 
-#todo[Lecture on 19 th]
+#todo[Some indivisible Fair Division Stuff]
 
 As we have shown, in divisible case, EF allocation always exists.
 
