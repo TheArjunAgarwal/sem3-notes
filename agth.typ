@@ -964,21 +964,6 @@ where the equilibria from Nash onwards are gurenteed to exist and Corealated is 
   p_(i j) > 0 
   $
 ]
-= Mechanism Design
-#definition(title:"Mechanism Design")[
-  Till now we have been given players, game and strategies and we want to find outcome via the equilibrium.
-
-  We will now do mechanism design where we are given the players and our ideal outcome and we want to come up with a game where the equilibrium is in line with our outcome.
-]
-#example()[
-  In making a cricket tournament, we don't want players to lose on purpose to get an easier opponent later and have better medal odds.
-
-  A faliure of this was the 2012 London Olympics where the women's badminton doubles was structured so badly that both teams were trying to lose in an extremely hard to watch match. Search "Wang Xiaoli / Yu Yang (CHN) vs Ha Jung-eun / Kim Min-jung (KOR)" if you want to see the match, the refree being tense and the crowd booing.
-
-  They were later disqualified for unsportsperson like behavior. Although, trying to win by all legal means is sportsperson like in my book. Maybe they should have set the tournament better to never let this be incetivized in the first place.
-  ]
-
-Mechanism design is used to design tournaments, voting schemes and schemes to divide stuff.
 
 = Fair Division
 #definition(title:"Division")[
@@ -1520,3 +1505,121 @@ which is a contradiction.
 ]
 
 While NSWO is gurenteed to exist, it is NP hard to find and even hard to approximate. The question if EF1+PO can be done in poly time is open.
+
+= Mechanism Design
+#definition(title:"Mechanism Design")[
+  Till now we have been given players, game and strategies and we want to find outcome via the equilibrium.
+
+  We will now do mechanism design where we are given the players and our ideal outcome and we want to come up with a game where the equilibrium is in line with our outcome.
+]
+#example()[
+  In making a cricket tournament, we don't want players to lose on purpose to get an easier opponent later and have better medal odds.
+
+  A faliure of this was the 2012 London Olympics where the women's badminton doubles was structured so badly that both teams were trying to lose in an extremely hard to watch match. Search "Wang Xiaoli / Yu Yang (CHN) vs Ha Jung-eun / Kim Min-jung (KOR)" if you want to see the match, the refree being tense and the crowd booing.
+
+  They were later disqualified for unsportsperson like behavior. Although, trying to win by all legal means is sportsperson like in my book. Maybe they should have set the tournament better to never let this be incetivized in the first place.
+  ]
+
+Mechanism design is used to design tournaments, voting schemes and schemes to divide stuff.
+
+== Here lies a class I missed and will need to write up later.
+#todo[Will write this at some point]
+
+= Auction Theory
+== Sealed Bid Auctions
+#definition[
+  $n$ agents, one seller. Private valuations $v_i, i in [n]$. $X$ is the set of feasible aloocations.
+
+  Allocation and payment rules are:
+  + Collect bids $b_i, i in [n]$ before
+  + Allocation rule $x(B) in X$
+  + Payment rule $p(B) in RR^n$
+ Utility is $u_i (b) = v_i x_i (B) - p_i (B)$
+
+ Where $p_i (B) in [0, b_i x_i (B)]$
+]
+#definition(title : "Implementable Allocation Rules")[
+  An allocation rule $x$ is implementable if $exists$ a payment rule $p$ such that the sealed bid auction $(x,p)$ is DSIC.
+]
+#definition(title : "Monotone Allocation Rule")[
+  An allocation rule $x$ is monotone if $
+  forall i in [n], forall z > y, quad x_i (z, b_(-i)) > x_i (y, b_(-i))
+  $
+]
+#definition(title : "Awesome Auctions?")[
+We want an auction to have the following propoerties
+- *Dominent Stratergy Incentive Compatible (DSIC)*: Truthful bidding must be a dominant stratergy.
+- *Strong Performence Guarentee*: Maximize $sum x_i v_i$ or social surplus.
+- Polytime Computablity
+]#footnote[I am not sure if this is the real term for this. Will check at some point.]
+
+#definition(title : "Sponsered Search Auctions")[
+$n$ agents, $k$ slots, $i^("th")$ slot has click through rate $alpha_i$ where $alpha_1 >= dots >= alpha_k$ and valuations $v_j$. Agent $j$ derives value $alpha_i v_j$ if $i^("th")$ slot is allocated to $j$.
+
+We want to choose allocation and pricing rules.
+]
+
+#lem(title : "Myerson's Lemma")[
+  + An allocation rule is implementable if and only if, it is monotone.
+  + For any implementable allocation rule $exists$, unique pricing rule $p$ such that $(x,p)$ is DSIC.
+  + $p$ is given by an explicit formula.
+]
+#proof[
+  ($==>$)
+    Assume $x$ is implementable with DSIC pricing $p$.
+    Suppose $0 <= y <= z$
+    
+      (i) Suppose $b_i = z$ and $v_i = y$ and other agents have bids fixed at $b_(-i)$. This is the case of *overbidding*.
+
+      As we want the DSIC property, by the power of abuse of notation, we shall now read $x_i (z) = z_i (z, b_(-i))$.
+
+      $
+      y x_i (z) - p_i (z) <= y x_i (y) - p_i (y)
+      $
+
+      (ii) Suppose $b_i = y$, $v_i = z$. This is the case of *underbidding*.
+      $
+      z x_i (y) - p_i (y) <= z x_i (z) - p_i (z)
+      $
+
+    We can write $ z (x_i (y) - x_i (z)) <= p_i (y) - p_i (z) <= y (x_i (y) - x_i (z))$
+
+    $=> (z-y) (x_i (z) - x_i (y)) >= 0\
+    => z >= y => x_i (z) >= x_i (y)$.
+    
+    ($<==$) Assume $x$ is monotone.
+    $
+    y(x_i (z) - x_i (y)) <= p_i (z) - p_i (y) <= z (x_i - x_i (y))
+    $
+    (i) $x$ is flat at $y$
+    $
+    lim_(z -> y^+) y(x_i (z) - x_i (y)) <= lim_(z -> y^+) p_i (z) - p_i (y) <= lim_(z -> y^+) z (x_i - x_i (y))\
+    => p_i (z) = p_i (y)
+    $
+    for $z$ in neighborhood of $y$.
+
+    (ii) $x$ has a step jump at $y$ of height $h$
+    $
+    lim_(z -> y^+) y(x_i (z) - x_i (y)) <= lim_(z -> y^+) p_i (z) - p_i (y) <= lim_(z -> y^+) z (x_i - x_i (y))\
+    => y h <= p_i (z) - p_i (y) <= y h\
+    => p_i (z) - p_i (y) = y h
+    $
+    jump i $x$ at $y$ implies a jump in $p$ at $y$.
+
+    $
+    therefore "Price at" y_l "when there are" l "jumps" y_1, y_2, dots, y_l\
+    = sum_(i=1)^l y_i ("jump heignt at" y_i "in" x_i)
+    $
+
+    (iii) When $x$ is diffrentiable
+    $
+    lim_(z -> y) y(x_i (z) - x_i (y))/(z-y) <= lim_(z -> y) (p_i (z) - p_i (y))/(z-y) <= lim_(z -> y) (z (x_i - x_i (y)))/(z-y)\
+    => y x'_i (y) <= p'_i (y) <= y x'_i (y)\
+    => p'_i (y) = y x'_i (y)\
+    => p_i (z) = integral_0^z p'_i (y) = integral_0^z y x'_i (y)\
+    $
+
+    #todo[From somewhere else!!!!]
+
+
+]
