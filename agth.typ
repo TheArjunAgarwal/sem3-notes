@@ -1620,6 +1620,71 @@ We want to choose allocation and pricing rules.
     $
 
     #todo[From somewhere else!!!!]
-
-
 ]
+== Awesome Auctions
+#definition(title : "Awesome Auctions?")[
+We want an auction to have the following propoerties
+- *Dominent Stratergy Incentive Compatible (DSIC)*: Truthful bidding must be a dominant stratergy.
+- *Strong Performence Guarentee*: Maximize $sum x_i v_i$ or social surplus.
+- Polytime Computablity
+]
+#lem[
+  Second Price Auction is an awesome auction.
+]
+#lem(title: "Myerson's Lemma (Single Parameter Environment)")[
+  (i) An allocation rule $X$ is implementable (ie $exists$ a DSIC pricing rule $p$) if and only if $X$ is monototone.
+  (ii) If $X$ is a monotone allocation tule then there $exists$, unique pricing rule $p$ such that $(x,p)$ is DSIC.
+  (iii) The pricing rule $p$ is given by an explicit formula.
+]
+#todo[More stuff, which I shall copy as I was on a Diwali laziness break.]
+== Knapsack Auctions
+#definition[
+  Seller's Capacity: $W$
+
+  Buyer $i$ has requitement $w_i$.
+
+  Goal: Allocate $x_i$ ammount to buyer $i in [n]$ such that $sum_(i=1)^n w_i x_i <= W$ where $x_i in {0,1}$.
+
+  Welfare maximization (assuming truthful bidding) maximize $sum_(i=1)^n x_i b_i$.
+]
+This is NP Hard as Knapsack is NP Hard!
+
+*Can we modify the existing approximation algorithm to be monotone, retaining the approximation gurentee?* From [Chawla, Immorlica, Lucier 2012], it is not true in genral. As in we can't do a black box reduction that is we need to know about the instance and can't do so in a general way.
+
+*Can there be a dominant stratergy that is different from truthful bidding?* 
+#definition(title: "Revelation Principle")[
+  For any mechanism $M$ which always has a dominent stratergy, then there is a mechanism $M'$ such that truthful bidding is dominant stratergy for $M'$.
+]
+#example(title: "'Silly' example")[
+  Single item auction where seller runs a second price auction of bids $2 b_i$ when agents submit $b_i, i in [n]$. (Note, the agents bid say $b_1 > b_2 > dots$ then agent $i$ pays $2b_2$).
+
+  Here dominant stratergy is $b_i = v_i / 2$.
+]
+#proof[
+  Notice $b_i$ is always a function of $v_i$.
+
+  For $M$, let the dominent strategy be $b_i = f_i (v_i)$.
+
+  Let $M'$ be a mechanism which takes ${b_i}$ as inputs and runs mechanism $M$ on $f_i (B_i)$. Thus, dominant stratergy for $M'$ is $b_i = v_i$.
+]
+
+This implies DSIC is free if we can design a mechanism with dominant stratergy.
+
+== Revenue Maximization
+#example[
+One Agent, one item. The agent valeus it $v$ which is private.
+]
+This general case is not solvalble. So we assume $v$ is drawn from a known probability distribution.
+#exercise[
+  Let's say seller's price is drawn from $v tilde "Uniform"[0,1]$ and seller sets the price to $r$. What $r$ maximizes revenue?
+]
+#soln[
+  Expected revenue is $r PP(v < r) = r (1-r)$ which is maximized at $r = 1/2$ and hence, expected revenue is $1/4$.
+]
+#exercise[
+  $v_1, v_2 tilde "Uniform"[0,1]$ and second price auction without reserve.
+]
+#exercise[
+  $v_1, v_2 tilde "Uniform"[0,1]$ and second price auction with reserve $R$.
+]
+#todo[The computation!]
