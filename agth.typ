@@ -6,6 +6,8 @@
 #let boxed(..args) = markrect(..args)
 #show: thm-rules
 
+#let varphi = $phi.alt$
+
 #show: noteworthy.with(
   paper-size: "a4",
   language: "EN",
@@ -1682,9 +1684,125 @@ This general case is not solvalble. So we assume $v$ is drawn from a known proba
   Expected revenue is $r PP(v < r) = r (1-r)$ which is maximized at $r = 1/2$ and hence, expected revenue is $1/4$.
 ]
 #exercise[
-  $v_1, v_2 tilde "Uniform"[0,1]$ and second price auction without reserve.
+  Let $v_1, v_2 tilde "Uniform"[0,1]$. What is expected revenue in a second price auction?
+]
+#soln[
+  Revenue is clearly $EE (min(v_1, v_2))$. We can compute it by:
+  $
+  PP(x < min(v_1, v_2)) = 1- (1-x)^2 = F_X (x)\
+  because EE(X) = integral_(0)^1 1 - F_X (x) dif x\
+  => EE(X) = integral_(0)^1 (1-x)^2 dif x\
+  = x^3/3 bracket.r_(-1)^0\
+  = 1/3
+  $
 ]
 #exercise[
-  $v_1, v_2 tilde "Uniform"[0,1]$ and second price auction with reserve $R$.
+Let $v_1, v_2 tilde "Uniform"[0,1]$. What is expected revenue in a second price auction with reserve price $R$ (we don't sell below $R$)?]
+#soln[
+  Revenue is $0$ if $v_1, v_2 < R$; $R$ if $v_i > R, v_(-i) < R$ and $min(v_1, v_2)$ if $v_1, v_2 > R$.
+
+  Thus, $
+  EE("revenue") = 0 * R * R + R * 2 * (R * (1-R)) + (1-R)*(1-R) * EE(min(v_1, v_2) | v_1, v_2 > R)\
+  = 0 R^2 + 2 R^2 (1-R) + (1-R)^2 EE(min(v_1, v_2) | v_1, v_2 > R)\
+  = 2 R^2 (1-R) + (1-R)^2 (R + EE(min(u_1, u_2)) quad "where" u_1, u_2 tilde "unifomr"[0,1-R]\
+  = 2 R^2 (1-R) + (1-R)^2 (R + (1-R)/3)\
+  = 2 R^2 (1-R) + ((1-R)^2 (1+2R))/3
+  $
+  This achives maxima at $R = 1/2$.
 ]
-#todo[The computation!]
+#exercise[
+Let $v_1, v_2, dots, v_n  tilde "Uniform"[0,1]$. What is expected revenue in a second price auction with reserve price $R$ (we don't sell below $R$)?]
+#soln[
+We use the order statistics notation.
+
+  Revenue is $0$ if $v_((1)) < R$, $R$ if $v_((1)) > R; v_((2)) < R$ and $v_((2))$ if $v_((1)), v_((2)) >R$.
+
+  We need to now compute the distribution of $v_((1))$ and $v_((2))$
+]
+
+== Revenue Maximizingin Auctions
+Single parameter environments where each agent has a private valuatuion $v_i$ and $X$ is a set of feasible allocations.
+
+*Our model* Single parameter environment where $v_i$'s are drawn form distributions $F_i, f_i$ which are independent and supported on $[0, v_(max)]$.
+
+The goal is to design a DSIC aiction $(X, p)$ that maximizes the expected revenue.
+
+Seller knows $F_i forall i in [n]$, $v_i$'s are private to the agents.
+
+$
+"Welfare" = sum_(i=1)^n x_i v_i\
+EE("Welfare") &= EE[sum_(i=1)^n x_i (v) v_i]\
+&= sum_(i=1)^n EE[x_i (v) v_i]\
+&= sum_(i=1)^n integral_0^(v_(max)) x_i (v) v_i f_i (v_i) dif v_i \
+\
+\
+\
+"Revenue" = sum_(i=1)^n P_i (v)\
+EE("Revenue") &= EE [sum_(i=1)^n P_i (v)]\
+&= sum_(i=1)^n EE [P_i (v)]
+$
+By Myerson's lemma,
+$
+P_i (v_i, v_(-i)) = integral_0^(v_i) z x'_i (z, v_(-i)) dif z\
+=> EE[P_i (v)] &= integral_(0)^(v_max) P_i (v) f_i (v_i) d v_i\
+&= integral_0^(v_max) [integral_0^v_i z x'_i (z, v_(-i)) dif z] f_i (v_i) dif v_i
+$
+Notice, the region of integration is 
+#todo[Nice drawing!]
+Interchanging the integral
+$
+= integral_0^(v_max) [integral_z^(v_max) f_i (v_i) dif v_i] z x'_i (z) dif z\
+= integral_0^(v_max) [F_i (v_max) - F_i (z)] z x'_i (z) dif z\
+= integral_0^(v_max) [1- F_i (z)] z x'_i (z) dif z
+$
+Integrating by parts
+$
+= [(1-F_i (z)) z x_i (z)]_0^(v_max) - integral_0^(v_max) x_i (z) [ 1 - F_i (z) - z f_i (z)] dif z\
+= (0 - 0) - integral_0^(v_max) x_i (z) f_i (z) [(1 - F_i (z))/(f_i (z)) - z] dif z\
+= integral_0^(v_max) x_i (z) f_i (z) [z - (1 - F_i (z))/(f_i (z))] dif z
+$
+Now compare this to the welfare function:
+$
+integral_0^(v_(max)) x_i (v) v_i f_i (v_i) dif v_i
+$
+The only difference we get is the valuation. We call this the virtual valuation of the agent.
+$
+varphi_i (z) := Z - (1 - F_i (z))/(f_i (z))
+$
+
+$
+=> "Expected Revenue" &= sum_(i=1)^n integral_0^(v_(max)) varphi_i (v) v_i f_i (v_i) dif v_i\
+&= sum_(i=1)^n EE[varphi_i (z) x_i (z)]\
+&= EE [sum_(i=1)^n varphi_i (z) x_i (z)]\
+&= "expected virtual welfare"
+$
+
+#example(title: "Virtual Valuation")[
+Let's consider $F_i tilde "uniform" [0,1]$.
+
+Then $F_i (z) = Z, f_i (z) = 1$. This implies
+$
+varphi_i (z) = z - (1-z)/1 = 2z - 1
+$
+Notice, $phi_i (z) <= 0$ for $z <= 1/2$. This implies that if all the virtual prices are below $0$, the seller should not sell/allocate item to anyone.
+]
+#example(title : "Single Item Auction")[
+  Let $F_1, F_2 dots$ are iid. How to design $(x,p)$?
+
+  *Goal* $forall v$ maximize $sum_(i=1)^n varphi_i (v) x_i (v)$. Is such an $x$ monotone?
+
+  We need $phi_i (v)$ to be increasing in $v$. A distribution $F_i$ such that $phi_i (v) = v - (1- F_i (v))/(f_i (v))$ is increasing is called "regular".
+
+  Allocation rule: Allot the item to the agent with max virtual valuation $=>$ second price auction with reserve price $varphi^(-1) (0)$ where $varphi = varphi_i forall i$.
+]
+
+#remark(title: "A digression on Regular Distribution")[
+  $
+  varphi(v) = v - (1- F(v))/(f(v)) = v - 1/h(v)
+  $
+  where $h$ is called the hazard rate of the distribution. 
+  
+  Regular functions are characterised by the strict convexity of $1/(1 − F(x))$ for the distribution (given we can differentiate, this is easy to prove given someone, somehow makes this hypothesis). Details on the characterisation if smoothness assumption is not made can be found in #link("https://doi.org/10.1007/s00199-012-0705-3.")[Ewerhart, 2012].
+
+It uses weird probability theory things like Dini Derivative and Prekopa-Borel theorem etc which is way beyond the amount of math I know.
+]
