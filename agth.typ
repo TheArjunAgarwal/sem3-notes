@@ -1524,22 +1524,146 @@ While NSWO is gurenteed to exist, it is NP hard to find and even hard to approxi
 
 Mechanism design is used to design tournaments, voting schemes and schemes to divide stuff.
 
-== Here lies a class I missed and will need to write up later.
-#todo[Will write this at some point]
-
 = Auction Theory
+== Single Item Auction
+#definition(title: "Single Item Auction")[
+  One seller wants to sell a single item, $n$ interested buyers (agents). Each agent has a value $v_i$ for the item.
+
+  *Goal:* To give the item to an agent and get payment from that agent.
+
+  *To decide:* Who gets the item? At what price?
+]
+We normally make the assumption that the agents are unaware of each other's valuations.
 == Sealed Bid Auctions
-#definition[
-  $n$ agents, one seller. Private valuations $v_i, i in [n]$. $X$ is the set of feasible aloocations.
+#definition(title: "Single Item, Sealed Bid")[
+  (1) Each bidder $i$ privately communicates a bid $b_i$ to the auctioneer.
+  
+  (2) The auctioneer decides who gets the good (if anyone).
+  
+  (3) The auctioneer decides on a selling price.
+]
+There is an obvious choice of $(2)$ being letting the highest bidder have the good. This is not always optimal from a revenue standpoint, but that is conversation for later.
+
+We can implement $(3)$ as:
+- *First Price Auction* Winner pays their bid
+- *Second Price Auctio* Winner pays the next highest bid
+
+#solution(title:"Reasoning About Auctions")[
+  The following is taken from Pollak's notes on Game Theory.
+
+  We claim that agents bid as if they know they will win. This is to avoid the so called 'winner's curse' where one has to pay more than their valuation.
+
+  The proof is obvious as if your bid is such that you regret winning, you should not bid that amount. Furthermore, we make the assumption that an agent would like to have the object than not.
+
+  Bidding below this amount is not optimal as say if you bid $y - epsilon$ where $y$ is the bid as if you know you win bid; then if an agent bids $y - epsilon/2$ and wins; the agent could be better off bidding $y - epsilon/2 + tilde(epsilon)$.
+
+  This implies that it is weakly dominent to bid one's valuation in a second price auction as the payoff function is $0$ if you are not the highest bidder and $v_i - b_((2))$ otherwise.
+
+  Similerly, bidding your value is weakly dominated in First Price Auction as the valuation function is $0$ if you are not the highest bidder and $v_i - b_(i)$ otherwise.
+]
+#definition(title: "Awesome Auctions")[
+ We want an auction to have the following propoerties
+- *Dominent Stratergy Incentive Compatible (DSIC)*: Truthful bidding must be a dominant stratergy.
+- *Strong Performence Guarentee*: Maximize $sum x_i v_i$ or social surplus where $x_i$ is $1$ if $i$ wins and $0$ if $i$ loses, subject to the obvious feasibility constraint that $sum_(i=1)^n x_i <= 1$ as we have only one item.
+- *Polytime Computablity*
+]
+An awesome auction is clearly desireable as truthful bidding is a dominant stratergy, the auction gurentees that the item will go to the agents who value it the most and the auction can be decided before the heat-death of the universe.
+#claim[
+  Second Price Auction is awesome.
+]
+== Sponsered Search Auction
+Perhaps the most profitiable auction of all time. In 2014, it made around 98% of google's revenue#footnote[You know, back when it was search engine and advertisment company and not an AI obssesed mega corporation burning money left and right].
+
+Similarly, not having a good sponsered search auction was one of the reasons behind the downfall of Yahoo.
+#definition(title:"Sponsered Search Auction")[
+Given $k$ add slots and and agents $j in [n]$ with per click value of $v_j$ of the agents. Assuming the click through rate of these slots is $alpha_i, i in k$. Thus, if agent $i$ gets slot $j$ then the value obtained is $alpha_j v_i_j$.
+
+An auction to alot thee $k$ slots to $n$ agent is called an sponsered search auction.
+]
+#prob[Can we design an awesome sponsered search auction?]
+#solution[
+*Step 1* Assume that all agents bid their true values and choose an allocation rule that maximizes the social surplus and runs in polytime.
+
+*Step 2* Design a payment rule that makes truthfulnes dominent.
+
+*Step 3* Profit!
+]
+
+#claim[
+  Greedy Assignment maximizes the social surplus.
+]
+#proof[
+The proof is an follows from Rearrangement inequality.
+]
+
+The step 2 is easy and is done by something called 'Myerson's Lemma' which will be the focus of a lot of what is to come.
+
+For step 3, well, that is left to the reader.
+
+#remark(title: "A detour to Olympiad Inequalities")[
+The statement and proof for Rearrangement Inequality and it's somewhat stronger cousin, Chebyshev’s Inequality are given below. They are quite common in Olympiad circles. 
+
+My proofs are taken from Doorway to Math Olympiad#footnote[Which is an incomplete and unpublished textbook I was writing at some point. Hopefully, I'll complete it at some point and will need to edit this footnote.].
+#thm(title: "Rearrangement Inequality")[
+    If $a_1 <= dots <= a_n$ and $b_1 <= dots <= b_n$ then for any permutation (rearrangement) $c_1, dots, c_n$ of $b_1, dots, b_n$,\\
+$
+a_1 b_n + dots + a_n b_1 <= a_1 c_1 + dots +a_n c_n <= a_1 b_1 + dots + a_n b_n
+$
+]
+#proof[
+The proof of the Rearrangement Inequality can be handled with proof by contradiction. We will prove the maximization first, the minimization will follow from that.
+
+Let us first consider the case where $n=2$. We can take $a_1 <= a_2$ and $b_1<= b_2$.
+$
+therefore (a_1-a_2)(b_1-b_2) <= 0\
+<==> a_1b_1+a_2b_2-a_1b_2-a_2b_1 <= 0\
+<==> a_1b_1+a_2b_2 <= a_1b_2+a_2b_1
+$
+
+Now for the general case. Let $a_1 <= a_2 <= dots <= a_n$ and $b_1 <= b_2 <= dots <= b_n$; and let's to the contrary assume that in the grouping maximizing the sum, $a_m$ is not paired with $b_m$. We'll instead assume that $a_m$ is paired with $b_l$ and $b_m$ is paired with $a_l$.
+
+Hence we are claiming, $a_m b_l+a_l b_m <= a_m b_m+a_l b_l$ which is untrue as we showed above.
+
+The minimization equality can be very easily proved by noting that if we have the set ${-b_1, -b_2, dots, -b_n}$, ordered in increasing order(which makes $b_1 <= b_2 <= b_3 dots <= b_n)$ and the set ${a_1, a_2, dots}$, ordered in decreasing order, then the maximum sum is just $-a_1 b_n - a_2 b_(n-1) + dots$. Whose negative is $a_1 b_n + dots + a_n b_1$ which will be the minimum possible value.
+]
+A more refined form of the rearrangement inequality is
+#thm(title: "Chebyshev’s Inequality")[
+If $a_1 <= a_2 <= ... <= a_n$ and $b_1 <= b_2 <= ... <= b_n$ then the following inequality holds:
+$
+n (sum_(i=1)^n a_i b_i) >= (sum_(i=1)^n a_i) (sum_(i=1)^n b_i)
+$
+On the other hand, if $a_1 <= a_2 <= ... <= a_n$ and $b_n <= b_(n-1) <= ... <= b_1$ then:
+$
+n (sum_(i=1)^n a_i b_i) <= (sum_(i=1)^n a_i) (sum_(i=1)^n b_i)
+$
+]
+
+#proof[
+The proof is simple. We know that $sum_(i=1)^n a_i b_i$ is maximal.
+$
+therefore sum_(i=1)^n a_i b_i >= a_1 b_1 + a_2 b_2 + ... + a_n b_n \
+sum_(i=1)^n a_i b_i >= a_1 b_2 + a_2 b_3 + ... + a_n b_1 \
+dots.v\
+sum_(i=1)^n a_i b_i >= a_1 b_n + a_2 b_1 + ... + a_n b_(n-1)
+$
+Adding them will give us the inequality.
+]
+]
+== Myerson's Lemma
+Let's define everything formally
+#definition(title: "Auction")[
+  $n$ agents, one seller. Private valuations $v_i, i in [n]$. $X$ is the set of feasible aloocations of the items.
 
   Allocation and payment rules are:
-  + Collect bids $b_i, i in [n]$ before
-  + Allocation rule $x(B) in X$
-  + Payment rule $p(B) in RR^n$
+  + Collect bids $b_i, i in [n]$ as input
+  + Allocation rule $x(B) in X$ that is $x : RR^n -> X $
+  + Payment rule $p(B) in RR^n$ that is $p : RR^m -> RR^n$
+ 
  Utility is $u_i (b) = v_i x_i (B) - p_i (B)$
 
  Where $p_i (B) in [0, b_i x_i (B)]$
 ]
+
 #definition(title : "Implementable Allocation Rules")[
   An allocation rule $x$ is implementable if $exists$ a payment rule $p$ such that the sealed bid auction $(x,p)$ is DSIC.
 ]
@@ -1621,24 +1745,8 @@ We want to choose allocation and pricing rules.
     => p_i (z) = integral_0^z p'_i (y) = integral_0^z y x'_i (y)\
     $
 
-    #todo[From somewhere else!!!!]
+    #todo[Will copy from somewhere else!!!!]
 ]
-== Awesome Auctions
-#definition(title : "Awesome Auctions?")[
-We want an auction to have the following propoerties
-- *Dominent Stratergy Incentive Compatible (DSIC)*: Truthful bidding must be a dominant stratergy.
-- *Strong Performence Guarentee*: Maximize $sum x_i v_i$ or social surplus.
-- Polytime Computablity
-]
-#lem[
-  Second Price Auction is an awesome auction.
-]
-#lem(title: "Myerson's Lemma (Single Parameter Environment)")[
-  (i) An allocation rule $X$ is implementable (ie $exists$ a DSIC pricing rule $p$) if and only if $X$ is monototone.
-  (ii) If $X$ is a monotone allocation tule then there $exists$, unique pricing rule $p$ such that $(x,p)$ is DSIC.
-  (iii) The pricing rule $p$ is given by an explicit formula.
-]
-#todo[More stuff, which I shall copy as I was on a Diwali laziness break.]
 == Knapsack Auctions
 #definition[
   Seller's Capacity: $W$
@@ -1646,10 +1754,10 @@ We want an auction to have the following propoerties
   Buyer $i$ has requitement $w_i$.
 
   Goal: Allocate $x_i$ ammount to buyer $i in [n]$ such that $sum_(i=1)^n w_i x_i <= W$ where $x_i in {0,1}$.
-
-  Welfare maximization (assuming truthful bidding) maximize $sum_(i=1)^n x_i b_i$.
 ]
-This is NP Hard as Knapsack is NP Hard!
+The issue with using our normal strategy is welfare maximization (assuming truthful bidding) maximize $sum_(i=1)^n x_i b_i$.
+
+This is NP Hard as this is litrally the Knapsack problem which is NP Hard!
 
 *Can we modify the existing approximation algorithm to be monotone, retaining the approximation gurentee?* From [Chawla, Immorlica, Lucier 2012], it is not true in genral. As in we can't do a black box reduction that is we need to know about the instance and can't do so in a general way.
 
@@ -1681,7 +1789,7 @@ This general case is not solvalble. So we assume $v$ is drawn from a known proba
   Let's say seller's price is drawn from $v tilde "Uniform"[0,1]$ and seller sets the price to $r$. What $r$ maximizes revenue?
 ]
 #soln[
-  Expected revenue is $r PP(v < r) = r (1-r)$ which is maximized at $r = 1/2$ and hence, expected revenue is $1/4$.
+  Expected revenue is $r PP(v > r) = r (1-r)$ which is maximized at $r = 1/2$ and hence, expected revenue is $1/4$.
 ]
 #exercise[
   Let $v_1, v_2 tilde "Uniform"[0,1]$. What is expected revenue in a second price auction?
@@ -1718,6 +1826,8 @@ We use the order statistics notation.
   Revenue is $0$ if $v_((1)) < R$, $R$ if $v_((1)) > R; v_((2)) < R$ and $v_((2))$ if $v_((1)), v_((2)) >R$.
 
   We need to now compute the distribution of $v_((1))$ and $v_((2))$
+
+  #todo[Left blank as is an excercise on the assignment.]
 ]
 
 == Revenue Maximizingin Auctions
