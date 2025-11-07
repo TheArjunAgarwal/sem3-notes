@@ -2034,4 +2034,10 @@ Let's now talk about the mechanism design aspects of this algorithm
   But as the sets are finite, this leads to a contradiction.
 ]
 
+#remark[
+  The socially maximal matching is NP complete to find via a reduction from Quadratic Programming.
+
+  However, Quadratic programming is solvable by Quantumn Computers in poly-time; hence, we can do this on a Quantumn computer. It's implemtation in Quiskit came in second at MIT's Quantumn Hackethon. You can see it #link("https://www.eecs.mit.edu/at-the-mit-quantum-hackathon-a-community-tackles-quantum-computing-challenges/")[here].
+]
+
 For more data in this regard, check out Grusfield and Irving's "Stable Matching: Structure and Algorithms".
