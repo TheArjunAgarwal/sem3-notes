@@ -1916,3 +1916,120 @@ Notice, $phi_i (z) <= 0$ for $z <= 1/2$. This implies that if all the virtual pr
 
 It uses weird probability theory things like Dini Derivative and Prekopa-Borel theorem etc which is way beyond the amount of math I know.
 ]
+
+= Matching Theory
+#definition(title: "Stable Matching")[
+  Sets $A,B$ where:
+  - $|A| = |B|$ 
+  - each $a in A$ has an ordering on $B$ say $Pi_a$
+  - each $b in B$ has an ordering on $a$ say $Pi_b$
+
+*Goal* To find a stable matching ie each $a in A$ is paired with $b in B$ and vice versa and $exists.not$ a blocking pair.
+]
+#definition(title : "Blocking Pair")[
+  $(a,b)$ is a blocking pair for matching $M$ if $a$ prefers $b$ over $M(a)$ and $b$ prefers $a$ over $M(b)$ as per $Pi_a$ and $Pi_b$.
+]
+A simple greedy algorithm for this is the deferred acceptence algorithm.
+#algo(title: "Deferred Acceptence or Gale-Sharpley")[
+  Each round: 
+1. Boys who are without a provisional match propose to the their top girl who is yet to reject them 
+2. Each Girl rejects all but the favourite offer received that round + her provisional match.
+3. Each Boy crosses off the rejecting girls from their list.
+4. Repeat till everyone has a provisional match. These are final matches.
+]
+#psudo(title: "Deferred Acceptence or Gale-Shapley")[
+  + $M = emptyset$
+  + while ($exists$ an unmatched $a in A$ who has not yet proposed to some $b in B$)"
+    + $a$ proposes to their most prefered $b in B$ as per $Pi_a$
+      + if $b$ is not matched:
+        + $b$ accepts $a$, $M."insert"((a,b))$
+      + else:
+        + if $M(b) = a'$ and $b$ prefers $a$ over $a'$:
+          + $M."remove"((a',b))$
+          + $M."insert"((a,b))$
+        + else:
+          + $b$ rejects $a$
+]
+Proving the termination of the algorithm is trivial as all agents prefer being matched then unmatched and no prposal is made twice. This also gurentees execution in $O(n^2)$ time. The proof of correctness follows as:
+#proof(title: "Proof of Correctness:")[
+  #lem[
+  For all women, their provisional match in round $t + 1$ is better or equal to match in round $t$. 
+]
+#proof(title: "Proof of Lemma")[
+  Obvious by induction.
+]
+
+  If $(m,w)$ and $(m', w')$ is unstable. As $m$ prefers $w'$ more then $w$, it must have proposed $w'$. But in a later round, $w'$ has a worse match. This contradicts the above lemma, thus, the proof of correctness follows from contradiction.
+]
+#definition(title: "Stable Partner")[
+  $b$ is a stable partner of $a$ if there exists a stable matching $M$ such that $(a,b) in M$.
+]
+
+#thm[
+  The output $M$ of DA gives every $a in A$ hus best possible stable partner.
+]
+#proof[
+  #lem[
+    No stable partner rejects $a$
+  ]
+  #proof[
+    We proceed the contradiction.
+
+    Let $(a,b) in M$ and $(a, b') in M'$ such that
+    $
+    a: dots b' dots b dots
+    $
+    and rejection of $a$ by $b'$ be the first rejection of a stable partner.
+
+    For $M$ to be stable, $b'$ must prefer $M(b) = a'$ over $M'(b) = a$.
+    $
+    b : dots a' dots a dots
+    $
+
+    For $M'$ ot be stable, $a'$ must prefer $M'(a')$ over $M(a')$. But then $a'$ must have been rejected by $M'(a')$ before $a$ was rejected by $b'$ in DA.
+
+    This contradicts the fact that rejection of $a$ by $b'$ be the first rejection of a stable partner.
+
+    Thus, by infinite descent, we have a contradiction.
+  ]
+
+Bu the lemma, no stable partner rejects in DA. Thus, output of DA is such that every $a in A$ hus best possible stable partner.
+]
+A similer proof will show:
+#thm[
+  The output $M$ of DA simultaneously is such that $b in B$ has the worst possible stable partner.
+]
+#remark[
+  Hannah Fry in "The Mathematics of Love" remarks on the above two theorems:
+
+  This result does make some intuitive sense. If you put yourself out there, start at the top of the list, and work your way down, you’ll always end up with the best possible person who’ll have you. If you sit around and wait for people to talk to you, you’ll end up with the least bad person who approaches you. Regardless of the type of relationship you’re after, it pays to take the initiative.
+  
+  The difference in outcomes between those who do the asking and those who wait to be asked is particularly important when the stable marriage problem is applied beyond imaginary couples at a party: something the US government found out the hard way. Through the National Resident Matching Program, the US government has been using the Gale Shapley algorithm to match doctors to hospitals since the 1950s. Initially, the hospitals did the “proposing.” This gave the hospitals the students they wanted, but didn’t work well for doctors who had to move halfway across the country to accept their least bad offer. It meant the system ended up full of unhappy doctors and, hence, unhappy hospitals. The organizers gave doctors the role of proposer when they found that out.
+  
+  But it’s not just hospitals and Friday-night action. The Gale-Shapley matching algorithm has been exploited in a host of real-world scenarios: dental residencies, placement of Canadian lawyers, assignment of students to high schools, and the sorority rush. It’s so useful that there is a huge amount of academic literature dedicated to investigating a range of extensions and special cases—many of which still apply to the original dating problem.
+  
+  Mathematicians have adapted the method to allow both men and women to approach either gender simultaneously, and changed the rules to include ties in preference lists, or scenarios where you’d rather go home alone than hook up with the weird guy in the corner. Academics have even explored what happens when you have cheating men (not cheating women, though, strangely).
+  
+  The math in these special cases can get quite heavy in places (although there are lots of lovely references at the end of this book if you’re interested in finding out more). But for all the extensions and examples, the message remains the same: If you can handle the occasional cringe-inducing rejection, ultimately, taking the initiative will see you rewarded. It is always better to do the approaching than to sit back and wait for people to come to you. So aim high, and aim frequently: The math says so.
+  ]
+#thm[
+  Let $M_1, M_2$ be two stable matchings. Form a set $S$ by assigning each $a in A$ his more preferred partner from $M_1, M_2$. 
+  
+  $S$ is a stable matching.
+]
+
+Let's now talk about the mechanism design aspects of this algorithm
+#thm[
+  DA is truthful for the proposing side by not for the reciving side.
+]
+#proof[
+  Suppose $a in A$ submits a false list and get's a better partner.
+
+  Let $M$ be the DA matching with true lists and $M'$ be the DA output with $A$ falsifing the list and $M'(a) = b' succ_a b =  M(a)$.
+
+  Let $M(b') = a'$. This means $M'(a') succ_(a') M(a')$ as otherwise $(a',b')$ block $M'$.
+
+  Similerly now, $M(M'(a'))$ will get a better partner and so on. But, we can't repeat $b$ at any point as that would contradict $M$'s stability by the no stable partner rejection lemma.
+
+  But as the sets are finite, this leads to a contradiction.
+]

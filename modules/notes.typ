@@ -115,6 +115,7 @@ align(center,[#course-desc])
       title: toc-title,
       depth: 3,
     ),
+    breakable: true
   )
 
   // Main content
