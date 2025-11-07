@@ -2033,3 +2033,5 @@ Let's now talk about the mechanism design aspects of this algorithm
 
   But as the sets are finite, this leads to a contradiction.
 ]
+
+For more data in this regard, check out Grusfield and Irving's "Stable Matching: Structure and Algorithms".
