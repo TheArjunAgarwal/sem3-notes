@@ -139,6 +139,7 @@ Let there be $n$ countries with the cost of pollution control being $3$. If a co
 
 This leads to the dark case of no one controlling pollution. We can check that if only $k$ countries control pollution, all have incentive to not control.
 
+
 #definition[
   A dominant strategy is what is best for a player regardless of whatever strategy the rest of the players choose to adopt. 
 ]
@@ -1048,7 +1049,7 @@ where the equilibria from Nash onwards are gurenteed to exist and Corealated is 
 
   (S) Let Sperner hold for $n-1$ simplex.
 
-  #figure(image("agth-pics/sperner-2dproofvis.png"), caption: [Visualization for the inductive step in 2D])
+  #figure(image("agth-pics/sperner-2dproofvis.png", height: 40%), caption: [Visualization for the inductive step in 2D])
 
   For an $n$ simplex, The $n$ facet is $n-1$ simplex and by induction, we will have odd number of doors via Sperner.
 
@@ -1508,7 +1509,7 @@ which is a contradiction.
 
 While NSWO is gurenteed to exist, it is NP hard to find and even hard to approximate. The question if EF1+PO can be done in poly time is open.
 
-= Mechanism Design
+= Interlude: Mechanism Design
 #definition(title:"Mechanism Design")[
   Till now we have been given players, game and strategies and we want to find outcome via the equilibrium.
 
@@ -1825,9 +1826,33 @@ We use the order statistics notation.
 
   Revenue is $0$ if $v_((1)) < R$, $R$ if $v_((1)) > R; v_((2)) < R$ and $v_((2))$ if $v_((1)), v_((2)) >R$.
 
-  We need to now compute the distribution of $v_((1))$ and $v_((2))$
+  Consider $
+  PP(x < v_(2) < x+h) = n h (n-1) (1-x-h) x^(n-2) \
+  => PP(v_(2) = x) = lim_(h -> 0) (PP(x < v_(2) < x+h))/h =  n (n-1) (1-x) x^(n-2)
+  $.
 
-  #todo[Left blank as is an excercise on the assignment.]
+  Thus,
+  $
+  EE("revenue") = underbrace(integral_R^1 n (n-1) (1-x) x^(n-2) x dif x, "selling at second price") + underbrace(R n R^(n-1) (1-R), "selling at reserve price") + underbrace(0, "not selling")\
+  = n (n-1) integral_R^1 x^(n-1) - x^n dif x + n R^n (1-R)\
+  = n(n-1) [1/(n) - 1/(n+1) - R^(n)/(n) + R^(n+1)/(n+1)] + n R^n (1-R)\
+  $
+
+  For $R = 1/2$
+  $
+  EE("revenue") = n(n-1) [1/n - 1/(n+1) - 1/(2^n n) + 1/(2^(n+1) (n+1))] + n/2^(n+1)
+  $
+
+And maximizing exoected revenue, we diffrentiate and set to 0
+$
+n (n-1) [- R^(n-1) + R^n] + n^2 R^(n-1)(1-R) - n R^n = 0\
+=> n (n-1) [R - 1] + n^2 (1-R) - n R = 0\
+=> (n-1)[R-1] + n (1-R) - R =0\
+=> (1 - R)(n-1-n) - R = 0\
+=> 1 - 2 R = 0\
+=> R = 1/2
+$
+Thus, the revenue is maximized at $R = 1/2$.
 ]
 
 == Revenue Maximizingin Auctions
@@ -1959,7 +1984,7 @@ Proving the termination of the algorithm is trivial as all agents prefer being m
   Obvious by induction.
 ]
 
-  If $(m,w)$ and $(m', w')$ is unstable. As $m$ prefers $w'$ more then $w$, it must have proposed $w'$. But in a later round, $w'$ has a worse match. This contradicts the above lemma, thus, the proof of correctness follows from contradiction.
+  FTSOC, let DAA scheme match $(m,w)$ and $(m', w')$, which is unstable. As $m$ prefers $w'$ more then $w$, it must have proposed $w'$. But in a later round, $w'$ has a worse match. This contradicts the above lemma, thus, the proof of correctness follows from contradiction.
 ]
 #definition(title: "Stable Partner")[
   $b$ is a stable partner of $a$ if there exists a stable matching $M$ such that $(a,b) in M$.
@@ -2032,12 +2057,116 @@ Let's now talk about the mechanism design aspects of this algorithm
   Similerly now, $M(M'(a'))$ will get a better partner and so on. But, we can't repeat $b$ at any point as that would contradict $M$'s stability by the no stable partner rejection lemma.
 
   But as the sets are finite, this leads to a contradiction.
+
+  We can just make a counter example to show the second part of the statement.
+  #todo[The counterexample]
 ]
 
 #remark[
   The socially maximal matching is NP complete to find via a reduction from Quadratic Programming.
 
-  However, Quadratic programming is solvable by Quantumn Computers in poly-time; hence, we can do this on a Quantumn computer. It's implemtation in Quiskit came in second at MIT's Quantumn Hackethon. You can see it #link("https://www.eecs.mit.edu/at-the-mit-quantum-hackathon-a-community-tackles-quantum-computing-challenges/")[here].
+  However, Quadratic programming is solvable by Quantumn Computers in poly-time; hence, we can solve socially maximal matching on a Quantumn computer. It's implemtation (named MIT-Qute, to be prononunced Meet Cute) in Quiskit came in second at MIT's Quantumn Hackethon. You can see it #link("https://www.eecs.mit.edu/at-the-mit-quantum-hackathon-a-community-tackles-quantum-computing-challenges/")[here].
+]
+#remark[
+  This genralizes to Stable Roomates problem. An $O(n^2)$ algorithm for it exists and was given by Robert Irving. I had implemented it in Haskell (in $O(n^2 log(n))$ to prevent use of Hash maps. With hash maps, it is $O(n^2)$) and the code can be found 
 ]
 
 For more data in this regard, check out Grusfield and Irving's "Stable Matching: Structure and Algorithms".
+
+== Hourse Allocation
+#prob[
+  There are $N$ agents and each agent has a house. Each agent also has a preference ordering over all houses.
+
+  *Goal:* Design an exchange mechanism so that the resulting matching allocation $Pi$ is stable.   
+]
+#example[
+$
+mat(a\:, h_b, h_c , h_a; b\:, h_c, h_a , h_b; c\:, h_a, h_b, h_c)
+$
+In this case the permutation $Pi = h_b, h_c, h_a$ makes everyone happy.
+
+But
+$
+mat(a\:, h_b, h_c , h_a; b\:, h_a, h_c , h_b; c\:, h_a, h_b, h_c)
+$
+Here, as $Pi = h_b, h_c, h_a$ is not gonna work as $a,b$ can make a blocking coalition switching their houses.
+]
+
+#definition(title: "Stable Allocation")[
+  $Pi$ is stable if there is no blocking colaition with respect to $Pi$
+]
+#definition(title: "Blocking Coalition")[
+  Given $Pi$, if there i a subset of agents $A subset.eq N$ such that $exists sigma : A -> A$ such that $forall i in A, sigma_i succ.eq Pi_i$ and $exists i in A, sigma_i succ Pi_i$.
+]
+#psudo(title: "Top Trading Cycle Algorithm")[
++ N' = N
++ while $N' != emptyset$
+  + Construct a graph where $(i,j) in E <==> h_j$ is $i's$ most favorite house amoung $j in N'$.
+  + If $exists$ a cycle $C = angle.l i_1, dots, i_k angle.r$:
+    + perform an exchange $Pi_(i_1) = h_(i_2), dots, Pi_(i_k) = h_(i_1)$
+    + Delete $i_1, dots, i_k$ from $N$.
++ return the resulting allocation $Pi$
+]
+Detecting the cycle takes $O(V+E)$ time, here, every agent(vertex) only has one edge, hence $O(V + V) = O(V)$. Every turn, atleast $1$ agent is removed from the list. This gives a worst case
+$
+O(N) + O(N-1) + dots +O(N) = O(N^2)
+$
+complexity.
+#thm[
+  $Pi$ is a stable allocation
+]
+#proof[
+  FTSOC let $Pi$, outputed by TTC is unstable. Thus, $exists A subset.eq N$ and $sigma : A -> A$ such that $forall i in A, sigma_i >= Pi_i$ and $exists i in A, sigma_i > Pi_i$.
+
+  We begin by partitioning the agents into itterations based on the round they were alloted their house.
+  $
+  N_1 : "Agents that get house in round 1"\
+  N_2 : "Agents that get house in round 2"\
+  dots.v\
+  N_t: "Agents that get house in round" t\
+  dots.v
+  $
+  Notice, $A subset.eq N_t$ for some $t$ is not possible as all the agents got their best house in $N backslash (N_1 union dots union N_(t-1))$ by TTC. Thus, no coalition is formed.
+
+  Thus, $A$ has to be over two of the parts of the partition. Let $a,b in A$ such that $a in N_i$ and $b in N_j$, $i < j$.
+  $
+  i = min k "s.t." A inter N_k != emptyset
+  $
+  #image("agth-pics/bad-image.png", height: 40%)
+  #todo[
+    Make bad image $->$ good image
+  ]
+  In $Pi$, $a$ gets top choice from $N backslash (N_1 union dots union N_(i-1))$
+  $
+  therefore Pi_a > sigma_a = h_b "for" a\
+  => a in.not A
+  $
+]
+#thm[
+  $Pi$ is unique stable allocation.
+]
+#proof[
+  #idea[Let $Pi'$ be another stable allocation. We can get this by inducting on the number of itterations. If $Pi, Pi'$ are same upto to $t$ itterations, it will be same in $t+1$.]
+]
+#definition(title: "Stratergyproof")[
+  By Stratergyproofness, here we mean that no agent can get a better house in $Pi$ by submitting a false list.
+]
+#thm[
+  The TTC algorithm is stratergyproof.
+]
+#proof[
+  An agent can put a false preference, putting up a false outgoing edge but not a false incoming edge. Hence, they can't get anything better in an earlier round and thus, can't get better by lying.
+]
+This makes the algorithm quite robust, despite being simple.
+#remark[
+  The problem has been studied in a number of settings.
+  - Envyfreeness : Defining envy as $i arrow_"envy" j$ if $Pi_i prec_i Pi_j$, can we allocate in an envy free fashion?
+  - Popular: An allocatation $Pi$ is popular, if for any other allocatation $sigma$, atleast $50%$ agents prefer $Pi$ over $sigma$.
+]
+== Kidney Exchange
+#prob[
+  There are paitients who need kidney transplant and there are doners willing to donate a kidney.
+
+  However, patient-donor pairs may be incompatible. In that case, sometimes we can exchange donors to get compatible donations. We also don't want huge cycles as some donor once their paitient recives a donation, they can walk out.
+]
+The last condition is there as a hospital can do only a number of transplants at once. The threshold we will see is $2$ as taking $3$ makes the problem NP hard (although approximation algorithms) exist.
