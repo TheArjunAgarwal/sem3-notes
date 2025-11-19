@@ -2073,7 +2073,7 @@ Let's now talk about the mechanism design aspects of this algorithm
 
 For more data in this regard, check out Grusfield and Irving's "Stable Matching: Structure and Algorithms".
 
-== Hourse Allocation
+== House Allocation
 #prob[
   There are $N$ agents and each agent has a house. Each agent also has a preference ordering over all houses.
 
@@ -2169,4 +2169,118 @@ This makes the algorithm quite robust, despite being simple.
 
   However, patient-donor pairs may be incompatible. In that case, sometimes we can exchange donors to get compatible donations. We also don't want huge cycles as some donor once their paitient recives a donation, they can walk out.
 ]
-The last condition is there as a hospital can do only a number of transplants at once. The threshold we will see is $2$ as taking $3$ makes the problem NP hard (although approximation algorithms) exist.
+The last condition is there as a hospital can do only a number of transplants at once. The threshold we will see is $2$ as taking $3$ makes the problem NP hard (although approximation algorithms exist).
+
+#solution(title: "Possible Solution 1")[
+  Treat paitrnts as agents, donors as houses and use TTC.
+]
+This solution fails due to the walk out risk, making large cycles impractical. Second, preferences are binary and not a total order#footnote[In biology, we actually could have a total order. We can use the tissue match percentage or edit distance on the DNA etc.].
+
+Notice, we can't just do the maximal bipartaite matching as $d_1 -> p_2 => d_2 -> p_1$ so that alogorithm doesn't work as is.
+
+#solution[
+  We make a graph $G = (V,E); V = {(p_i, d_i) | i in [n]}, E = {(i,j) | d_i -> p_j, d_j -> p_i}$.
+
+  We want to find a maximum matching in $G$. We define a priority order on paitients $1, dots, n$.#footnote[This may sound unethical but
+  + Some paitients have less surviaval odds if they don't get kidney fast enough.
+  + We might have multiple maximum matchings in $G$ and have to choose $1$ in an unbiased/truthful fashion.
+  ]
+  #psudo(title: "Kidney Matching")[
+    + $M_0 =$ set of maximum matching in $G$
+    + for $i in [n]:$
+      + $z_i = $ matchings in $M_(i-1)$ that match $i$
+      + if $Z_i != emptyset$
+        + $M_i = z_i$
+      + else
+        + $M_i = M_(i-1)$
+    + output an arbitary matching from $M_n$
+  ]
+]
+#claim[
+  The mechanism is DSIC
+]
+The proof follows from the above mechanism being truthful that is no agent has incentive to not declare a matching.
+#remark[
+Three way exhanges are practical but finding maximum number of disjoint 3-cycles is NP-complete.
+
+Emprirical results show that $4$ and larger cycles don't drastically improve the number of exhanges or people getting kidneys.
+]
+=== Truthfulness by Hospitals
+Consider the case
+#automaton((
+  "1":("4":"", "2":""),
+  "2":("1":"","5":""),
+  "3":("6":""),
+  "4":("1":""),
+  "5":("2":"","6":""),
+  "6":("5":"","3":"")
+),
+layout:layout.grid.with(columns: 2, spacing: 2)
+)
+In this case, if hospital $1$ has paitient $1,2,3$ and hospital $2$ has paitients $4,5,6$; then there is incentive to perform $1 <-> 2$ and $5 <-> 6$ which will sevearely undermine the system!
+
+#automaton((
+  "1":("4":"", "2":""),
+  "2":("1":"","5":""),
+  "3":("7":""),
+  "4":("1":""),
+  "5":("2":"","6":""),
+  "6":("5":"", "7":""),
+  "7":("3":"","6":"")
+
+),
+layout:layout.grid.with(columns: 3, spacing: 2)
+)
+
+Similerly in this case, Hospital $1$ has an incentive to not reprort $(1,2)$ so that $3$ always gets matched.
+
+== Matching Markets#footnote[Yay!]
+#definition(title:"Popular Matching")[
+  Given agents and items where agents have an ordering on items (possibly incomplete). Given matching $M_1$ and $M_2$, $M_1$ is more popular than $M_2$ if more agents prefer $M_1$ over $M_2$.
+
+  A popular matching is $M$ such that $M succ.eq M'$ for $M' in cal(M)$ where $cal(M)$ is the set of all matchings.
+]
+This is not gurenteed to exist as
+$
+mat(
+  a_1 : b_1, b_2, b_3;
+  a_2 : b_1, b_2, b_3;
+  a_3 : b_1, b_2, b_3;
+)
+$
+Notice, $(b_1, b_2, b_3) prec (b_3, b_1, b_2) prec (b_2, b_3, b_1) prec (b_1, b_2, b_3)$ and we have a cycle. In this case, we don't have a popular matching.
+
+#claim[
+  A popular matching has to maximum on top-choice edges
+]
+This claim to some extent is a characterisation of popular matching.
+#proof[
+  FTSOC, let there be a popular matching that is not maximum on the top-choice edges.
+
+  That means $exists a_i, a_j, g_i, g_j$ such that $a_i$'s first choice is $g_i$ and $a_j$'s first chocie is $g_j$ but $a_i -> g_j$ and $a_j -> g_k$ and some $a_k -> g_i$. 
+  
+  In this case, we can match $a_i -> g_i$ and $a_j -> g_j$ and $a_k -> g_k$ which atmost degrades $1$ agent while making $2$ agents better.
+
+  Thus, this can't be popular and hence, we have a contradiction!
+]
+Notice, the converse is not neccesarily true.
+#claim[
+  For every $a$, adding $l(a)$ the last choice of $a$ for consistency (is last is $a$'s preference but is on the list. Is on nobody else's list);
+
+  If we let $f(a)$ be the first choice of $a$ and $s(a)$ be the first choice amoung those items which are nobody's first choice then:
+
+  A popular matching must matchess each agent to either $f(a)$ and $s(a)$.
+]
+#proof[
+  FTSOC, let there be a popular matching that has some agent $a$ matched to neither $f(a)$ or $s(a)$.
+
+  This means there exists $a_i, a_j, g_i, g_j$ such that $g_i = s(a_i)$ and $g_j = f(a_j)$ but $a_i -> g_j$ and $a_j -> g_k$ and some $a_k -> g_i$.
+
+  We can match $a_i -> g_i$, $a_j -> g_j$ and $a_k -> g_k $ which is better as $a_i$ is matched to $s(a_i)$, $a_j$ is matched to $f(a_j)$.
+
+  Thus, we have a contradiction.
+]
+
+#claim[
+  Any matching that has a maximum number of top choice edges and matches each $a$ to $f(a)$ or $s(a)$ is a popular matching.
+]
