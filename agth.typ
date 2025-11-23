@@ -2240,7 +2240,11 @@ Similerly in this case, Hospital $1$ has an incentive to not reprort $(1,2)$ so 
 
   A popular matching is $M$ such that $M succ.eq M'$ for $M' in cal(M)$ where $cal(M)$ is the set of all matchings.
 ]
-This is not gurenteed to exist as
+*Input*: Given $G = (A union B, E)$ where each $a in A$ has a preference order over it's neighbors in $B$.
+
+We want to find a matching $M$ such that $exists.not n in cal(M)$ more popular than $M$.
+
+Notice, this is not gurenteed to exist as
 $
 mat(
   a_1 : b_1, b_2, b_3;
@@ -2250,10 +2254,11 @@ mat(
 $
 Notice, $(b_1, b_2, b_3) prec (b_3, b_1, b_2) prec (b_2, b_3, b_1) prec (b_1, b_2, b_3)$ and we have a cycle. In this case, we don't have a popular matching.
 
+The following set of claims to some extent will provide a characterisation of popular matching.
+
 #claim[
   A popular matching has to maximum on top-choice edges
 ]
-This claim to some extent is a characterisation of popular matching.
 #proof[
   FTSOC, let there be a popular matching that is not maximum on the top-choice edges.
 
@@ -2283,4 +2288,91 @@ Notice, the converse is not neccesarily true.
 
 #claim[
   Any matching that has a maximum number of top choice edges and matches each $a$ to $f(a)$ or $s(a)$ is a popular matching.
+]
+
+#psudo(title: "Popular Matchings")[
+  + Construct $G'$ 
+    + f-edges: for each $(a,b)$ where $b$ is first choice of $a$ in $G$:
+    + s-edges: $(a,b)$ where $b$ is not the first choice of nobody else in $G$. Let $b = b_a$, a dummy vertex if no such vertex exists.
+  + Find a max matching on $f$-edges. 
+  + Add $s$-edges and augment M_1.
+]
+#todo[Copy from Kelly for GT definitions!]
+
+Notice, the algorithm runs in $O(m + n)$ time.
+
+== Stratigic Concerns
+Notice, our algo is not stratergyproof!
+#example(title:"Perfect Matching is not Strategyproof")[
+Consider the true preferences
+$
+mat(
+  a_1\: p_1, p_2;
+  a_2\: p_1, p_2, p_5;
+  a_3\: p_2, p_3;
+  a_4\: p_2, p_4;
+)
+$
+We  get the matching $(a_1, p_1),(a_2, p_5),(a_3, p_2), (a_4, p_4)$.
+
+However, by lying
+$
+mat(
+  a_1\: p_1, p_2;
+  a_2\: p_2;
+  a_3\: p_2, p_3;
+  a_4\: p_2, p_4;
+)
+$
+We get the matching $(a_1, p_1),(a_2, p_2), (a_3,p_3), (a_4, p_4)$.
+]
+
+The first half of this material comes from Abraham, Irving, Kavitha, Melhorn 2003. The strategic part comes from Popular Matchings : Structure and Strategic issues, Narse 2013. The latter shows a linear time algo that given everyone's ordering, gives the best falsification to make.
+
+The problems of manipulation by a coalition is open#footnote[Was in the 2013 paper, Prof. Prajakta is not sure if it still is.]
+
+#remark[
+  In case of tied preferences, we can modify the above algorithm with 'galois' decomposition.
+]
+== Perfect Matching with double sided preferences
+#definition()[
+  Consider $G = (A union B, E)$, each $v in A union B$ has a preference ordering over its neighbours.
+
+  We want to find a popular matching in $G$
+]
+#thm[
+  A popular matching always exists and is computable in $O(m+n)$ time where $n = |V|$ and $m = |E|$.
+]
+#thm[
+  - Every stable matching is popular. 
+  - A stable matching is min-size popular
+  - All stable matchings have the same size
+]
+#psudo(title:"Computation of max size popular matchings")[
+  + Execute the Gale-Shapley algorithm
+  + Unmatched vertices on the proposing side are promoted to a $*$ status
+  + The $*$-vertices propose again (from top of their lists) similar to Gale Shapley over a "normal" one
+]
+#example[
+  Consider
+  $
+  mat(
+    a_1 : b_1, b_2;
+    a_2 : b_1;
+    b_1 : a_1, a_2;
+    b_2 : a_1
+  )
+  $
+  Running GS directly gives $(a_1, b_1)$. But if we run our star algorithm, $a^*_2$ proposes to $b_1$ and then $a_1$ proposes to $b_1$ to get$(a_1, b_2),(a_2, b_1)$.
+]
+We will not get into the proof but here are a few interesting things.
+#thm[
+  The algo gives a max size popular matching and it is $>= 2/3$ size of maximum matching.
+]
+Intrestingly, giving 2 or more stars doesn't lead to popular matchings but leads to larger matchings who are popular in their size. This is a paper by Kavitha titled "A size popularity trade off in the stable marriage setting" in 2015.
+
+This algorithm is quite general and hence, can be extended to a lot of cases. For example, we can use it in matching kids to collages.
+
+#align(center)[
+  #text(size: 64pt, weight: "bold", fill: rgb("#A7C957"))[THE END]
 ]
