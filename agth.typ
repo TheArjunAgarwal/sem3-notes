@@ -842,7 +842,7 @@ So we go down to PPAD, a class contained in TFNP.
 We will do the first part by an intermediate step called *Sperner Lemma*.
 
 #lem(title:"Sperner's Lemma")[
-  Given a lattice as an input with the lattice points colored in three colors with every boundry being forbidden to use one color. The intermediate vertices can have any color (from the 3).
+  Given a lattice as an input with the lattice points colored in three colors with every boundary being forbidden to use one color. The intermediate vertices can have any color (from the 3).
 
   We define a triangle as 3 points in the same cell. That is a $1, 1, sqrt(2)$ right angle triangle where lengths are unit.
 
@@ -881,7 +881,7 @@ Some issues with Nash Equilibria are:
   [$-5,-5$], [$-1,-10$], 
   [$-10, -1$], [$-2, -2$],
 )
-The optimal cases is $-2, -2$ but the Nash equilibrium is $-5, -5$ which makes the cost of anarchy $2.5$ and is not desireable from players point of view.
+The optimal cases is $-2, -2$ but the Nash equilibrium is $-5, -5$ which makes the cost of anarchy $2.5$ and is not desirable from players point of view.
 ]
 
 #prob[
@@ -898,7 +898,7 @@ Unfortunately, this is also PPAD complete for all $epsilon$ as our proof for PPA
 #thm[
   Around each NE, there are $epsilon$-NE but converse may not hold as $exists$ games where an $epsilon$-NE is 'far' from any NE.
 ]
-=== Corealated Equilibria
+=== Correlated Equilibria
 #example[
     #nfg(
   players: ("P1", "P2"),
@@ -911,17 +911,17 @@ The NE are clearly $C$ and $M$ pure and $((2/3, 1/3) (1/3, 2/3))$ mixed. The exp
 $
 (2,1), (1,2), (2/3, 2/3)
 $
-respectively where the mixed equilibrium is worse for both as they are assigning some probability to the undesireable $C M, M C$ options.
+respectively where the mixed equilibrium is worse for both as they are assigning some probability to the undesirable $C M, M C$ options.
 ]
 
-These are called Corealated equilibria.
-#definition(title:[Corealated Equilibriium])[
+These are called Correlated equilibria.
+#definition(title:[Corelate Equilibrium])[
 #algo[. 
-  Given $n$-players $[n]$, stratergy sets $S_1, dots, S_n$.
+  Given $n$-players $[n]$, strategy sets $S_1, dots, S_n$.
 
   - A coordinator declares a probability distribution on $S_1 times dots S_n$.
 
-  - The coordinator 'privately' samples the joint distribution for a stratergy combination.
+  - The coordinator 'privately' samples the joint distribution for a strategy combination.
 
   - The coordinator tells player $i$ to play $s_i$
 
@@ -950,9 +950,9 @@ Basically, the player is better off heeding the advice of the coordinator given 
 As John Green once said: "Turtles all the way down!", we will say Equilibria all the way down.
 
 $
-"Dominent Equilibria" subset.eq "Weakly Dominent Equilibria" subset.eq "Nash Equilibria" subset.eq "Corelated Equilibria"
+"Dominant Equilibria" subset.eq "Weakly Dominant Equilibria" subset.eq "Nash Equilibria" subset.eq "Correlated Equilibria"
 $
-where the equilibria from Nash onwards are gurenteed to exist and Corealated is easy to compute.
+where the equilibria from Nash onwards are guaranteed to exist and Correlated is easy to compute.
 
 #thm[
   CE form a convex set
@@ -1001,7 +1001,7 @@ where the equilibria from Nash onwards are gurenteed to exist and Corealated is 
   - The vertices that lie along any edge of triangle $A B C$ have only two colors, the two colors at the endpoints of the edge. For example, each vertex on $A C$ must have the same color as $A$ or $C$. 
 ]
 #thm(title: "Sperner's Lemma in Triangles")[
-  Given any Sperner colored triangulation, there exists odd numver of fully colored elementary triangle (has all three colors.)
+  Given any Spenumberolored triangulation, there exists odd numver of fully colored elementary triangle (has all three colors.)
 ]
 #cor[
   Given any Sperner colored triangulation, there exists atleast one of fully colored elementary triangle.
@@ -1014,7 +1014,7 @@ where the equilibria from Nash onwards are gurenteed to exist and Corealated is 
 
   A 2 simplex is a triangle.
 
-  A 3 sinpmex is a tetrahedron.
+  A 3 simplex is a tetrahedron.
 
   So on and so fourth.
 ]
@@ -1024,10 +1024,10 @@ where the equilibria from Nash onwards are gurenteed to exist and Corealated is 
 ]
 #figure(image("agth-pics/sperner-tetra.png"), caption: [Sperner Tetrahedron])
 #definition(title: "Sperner Coloring")[
-  Given a $n$ simplex divided into $n$ simplices, we call a coulering Sperner if:
-  - Each of the boundry vertices of the initial simplex has a distinct color.
+  Given a $n$ simplex divided into $n$ simplices, we call a cohering Sperner if:
+  - Each of the boundary vertices of the initial simplex has a distinct color.
   
-  - The vertices that lie along any facet $i$ (named after the boundry vertice not in the facet) doesn't have color $i$.
+  - The vertices that lie along any facet $i$ (named after the boundary vertex not in the facet) doesn't have color $i$.
 ]
 #thm(title: "Sperner's Lemma")[
   Any Facet of a sperner colored simplex is also sperner colored, also, number of rainbow elementary $n$-simplices is odd.
@@ -1067,19 +1067,19 @@ We will solve a general version of @cake-cutting also called the cake-cutting pr
 #idea[
 Observe that in a particular cut-set, if we ask all players which part do they prefer and get all different answers, then that cut-set gives an envy-free division (because every one gets the piece he/she prefer the most). We will use Sperner’s lemma to prove that there must exists such cut-set, as well as finding one.
 
-The idea is that Sperner allows us to gurentee that there is a triangle part with all vertices of different color. So given continuity aka small change in cut-set causes small change in preference; we can make a Sperner coloring of the linear programming simplex and get an approximate. Tha's exactly what the solution is.
+The idea is that Sperner allows us to guarantee that there is a triangle part with all vertices of different color. So given continuity aka small change in cut-set causes small change in preference; we can make a Sperner coloring of the linear programming simplex and get an approximate. Tha's exactly what the solution is.
 ]
 
 #soln[
   Consider every possible cut-set that divides the cake into $n$ (maybe empty) pieces. Let $x_i$ be the proportion of ith leftmost part. We have $x_1 + x_2 + dots + x_n = 1$ and $x_i >= 0$ for every $i = 1, 2, dots , n$.
   
-  In the $n$-dimensional space, consider a polytope formed by linear programmming  $x_1 + x_2 + dots + x_n = 1$ and $x_i >= 0$ for every $i = 1, 2, dots , n$. The resulted polytope is a regular $(n − 1)$-simplex.
+  In the $n$-dimensional space, consider a polytope formed by linear programming  $x_1 + x_2 + dots + x_n = 1$ and $x_i >= 0$ for every $i = 1, 2, dots , n$. The resulted polytope is a regular $(n − 1)$-simplex.
   
   Then, we triangulate that simplex into smaller regular $(n − 1)­$ simplices with each having side length less than $epsilon$, for a small enough $epsilon$, as well as writing numbers $1, 2, dots, n$ on the vertices in a way that every elementary $(n − 1)$-simplex has vertices with all different numbers.
 
   #example[
     #image("agth-pics/ef-continous-example.png")
-    In that figure, the resulted polytope is a regular triangle (regular $2$-simplex). We then divide it into $k^2$ smaller regular triangles, for some integer $k$ as big as we want. Then, we write a number on each vertex $1, 2, 3$ in a cyclic order such that every elementry triangle has all three vertices with different numbers.
+    In that figure, the resulted polytope is a regular triangle (regular $2$-simplex). We then divide it into $k^2$ smaller regular triangles, for some integer $k$ as big as we want. Then, we write a number on each vertex $1, 2, 3$ in a cyclic order such that every elementary triangle has all three vertices with different numbers.
   ]
 
   Then, at each vertex with coordinates $(x_1, x_2,dots, x_n)$ with number $i$, we ask player $i$ that which piece of cake that he/she prefers if the sizes of pieces of cake is $x_1, x_2,dots, x_n$, respectively. We then color that vertex according to the answer.
@@ -1096,31 +1096,31 @@ The idea is that Sperner allows us to gurentee that there is a triangle part wit
 
   As, no people prefer the piece with size zero, so the color of vertices on each face must be the same as one of the corners of that face. Therefore, the color labeling of vertices in the simplex is a Sperner labeling.
 
-  By Sperners’ lemma, there must be at least one elementery $(n − 1)$­ simplex that has vertices with different colors. We then divide the cake by the cut-set represented by any interior point of that $(n−1)$-simplex.
+  By Sperners’ lemma, there must be at least one elementary $(n − 1)$­ simplex that has vertices with different colors. We then divide the cake by the cut-set represented by any interior point of that $(n−1)$-simplex.
   
-  Since the size of each elementry simplex is less than $epsilon$, by the continuous preference assumption, all people will be satisfied with that cut-set.
+  Since the size of each elementary simplex is less than $epsilon$, by the continuous preference assumption, all people will be satisfied with that cut-set.
   ]
 
-  The algorithm this solution leads to is named *Simmons’ Algorithm* as it was devloped by Forrest Simmons in 1980.
+  The algorithm this solution leads to is named *Simmons’ Algorithm* as it was developed by Forrest Simmons in 1980.
 
-=== Harmounious Rent Problem
+=== Harmonious Rent Problem
 We will now look into solving @rent-division using Sperner’s lemma.
 
 One possible attempt is to consider every possible assignment of price to each bedroom. i.e. set the price of room $i$ to be $x_i$ such that $x_1 + x_2 + dots + x_n = S$, when $S$ is the total price of the apartment, and $x_i >= 0$ for every $i = 1, 2, dots , n$. 
 
 Then, we consider the $(n − 1)­$ simplex obtained from the linear programming and color it like in the cake-cutting problem. 
 
-However, this problem is different from the cakecutting problem in one aspect. In the cake-cutting problem, the bigger the piece of cake is, the higher chance people will want it; however, in this problem, the higher the price of a room is, the lower chance people will want that room. This would mean our simplex could look like:
+However, this problem is different from the cake-cutting problem in one aspect. In the cake-cutting problem, the bigger the piece of cake is, the higher chance people will want it; however, in this problem, the higher the price of a room is, the lower chance people will want that room. This would mean our simplex could look like:
 
 #image("agth-pics/ef-rent-coloring.png", height: 40%)
 
 #idea[
-  If we could comehow turn every corner into a face and every face to a corner, we would be done.
+  If we could somehow turn every corner into a face and every face to a corner, we would be done.
 
   Can that be done?
 ]
 Yes. We transform each $k$ face to $n-k-1$ face (for a $n$ simplex).
-#figure(image("agth-pics/spener-duel.png"), caption:[We have marked the vertices, points on line and colored an elementry cell to show how it transforms.])
+#figure(image("agth-pics/spener-duel.png"), caption:[We have marked the vertices, points on line and colored an elementary cell to show how it transforms.])
 
  Let the triangulation of $S^∗$ inherit a labelling via this correspondence with $S$. One may now verify that the labelling of $S^*$ is a Sperner labelling! Hence,there exists a fully labelled elementary simplex of $S^*$, which corresponds to a fully
 labelled elementary simplex of $S$, as desired. We can now present the solution.
@@ -1154,19 +1154,19 @@ Another standardized assumption is *monotonicity* that is $forall S subset.eq T,
 Assuming the valuations to be *Additive* is also a rather common assumption. We make it, unless stated otherwise.
 
 We now we ask, what is fair?
-=== Propotional Division
-#definition(title: "Proptional")[
+=== Proportional Division
+#definition(title: "Probational")[
   If for all agents $i in [n], v_i (A_i) >= 1/n$, then the division satisfies *PROP*.
 
   We are making the strong normalization assumption here.
 ]
-As we will show, PROP is possible for the divisible case (recall that the continuity condition for valuations in divisible settings imply additvity). 
+As we will show, PROP is possible for the divisible case (recall that the continuity condition for valuations in divisible settings imply additivity). 
 
 However, it may not be possible for indivisible goods. Consider 2 agents and 1 item.
 #remark[
-  The 2 agent, 1 item case is a common counter example for indivisible fair division. It's genralization $n$ agents, $n-1$ items is also a counter example in many cases.
+  The 2 agent, 1 item case is a common counter example for indivisible fair division. It's generalization $n$ agents, $n-1$ items is also a counter example in many cases.
 ]
-#psudo(title: "Moving Knife Algorithm (PROP for divisible goods with continous valuation)")[
+#psudo(title: "Moving Knife Algorithm (PROP for divisible goods with continuous valuation)")[
   + We move a knife from left to right over a cake
   + As soon as the valuation is $1/n$ for an agent, they call stop.
   + We cut cake here.
@@ -1174,7 +1174,7 @@ However, it may not be possible for indivisible goods. Consider 2 agents and 1 i
   + Continue with rest of cake and agents
 ]
 #proof(title:"Proof of correctness")[
-  All agents other than the last one call stop when they got a piece with proptional share.
+  All agents other than the last one call stop when they got a piece with proportional share.
 
   For the last agent, we know that $v_n ([0,1]) = 1$. Let $A = (A_1, dots, A_n)$ be the allocation vector.
   Then,
@@ -1191,22 +1191,22 @@ However, it may not be possible for indivisible goods. Consider 2 agents and 1 i
 
 Would such an algorithm work for the indivisible case (given additive valuations)?
 
-#psudo(title:"Bag Filling Alogorithm")[
+#psudo(title:"Bag Filling Algorithm")[
   + Add items to a bag till an agent says stop.
   + Give bag to agent and continue.
 ]
-Why would this not work? Because unlike the above case where $v_i (A_i) = 1/n$ for all but last agent(they can have better aswell); here $v_i (A_i) >= 1/n$ and $forall z in A_i, v_i (A_i backslash z) < 1/n$. 
+Why would this not work? Because unlike the above case where $v_i (A_i) = 1/n$ for all but last agent(they can have better as well); here $v_i (A_i) >= 1/n$ and $forall z in A_i, v_i (A_i backslash z) < 1/n$. 
 
-So can we modify it to maybe work? Not really as PROP is not gurenteed to exist. We can instead modify it to work for *PROP1*.
+So can we modify it to maybe work? Not really as PROP is not guaranteed to exist. We can instead modify it to work for *PROP1*.
 #definition(title: "PROP1")[
   An allocation is *PROP1* if and only if
   $
   forall i in A_i, exists z in Z backslash A_i "s.t." v_i (A_i) + v_i(z) >= 1/n
   $
 
-  This can be genralized to *PROPc* where $c$ is the number of goods we get to add.
+  This can be generalized to *PROPc* where $c$ is the number of goods we get to add.
 ]
-#psudo(title:"Bag Filling Alogorithm")[
+#psudo(title:"Bag Filling Algorithm")[
   + Add items to a bag till an agent says stop.
   + Remove the last item and put it in a special bag
   + Give bag to agent and continue.
@@ -1230,7 +1230,7 @@ However, PROPx also fails for Agent 1 who gets at most nine $c$s. If Agent 1 get
 3 get one $a$ each, then one of Agents 2 and 3 gets at most five $c$s (otherwise $a$ fails the EFX) and a total utility of $0.3$, so PROPx fails again.
 ]
 #remark[
-  The counter example was though of with $a$ with value $3/2$, $b$ with $4$ and $c$ with $3/10$ and then scalled to the case.
+  The counter example was though of with $a$ with value $3/2$, $b$ with $4$ and $c$ with $3/10$ and then scaled to the case.
 
   This is another common counter example idea to make things almost equal but then divide it into parts.
 ]
@@ -1292,7 +1292,7 @@ Can we weaken the case?
 ]
 #proof[
   #psudo(title: "Round Robin Algorithm")[
-    + Order the agents arbitarily
+    + Order the agents arbitrarily
     + for $i in [n]$:
       + if $Z = emptyset$: 
         + break
@@ -1312,7 +1312,7 @@ If $i > j$, then $i$ can envy $j$ only over the first item as she passed on the 
   Round Robin is also a class of algorithms which do work in a lot of cases.
 ]
 #definition(title: "Chore")[
-  A chore is something to be allocated which all agents value negitivly.
+  A chore is something to be allocated which all agents value negatively.
 ]
 While it is clear that round robin works in only chore case, we can show it works to give an EF1 in a mix of goods and chore case.
 #definition(title: "EF1")[
@@ -1327,7 +1327,7 @@ While it is clear that round robin works in only chore case, we can show it work
   that is agents don't envy each other upto removal of one good.
 ]
 #psudo(title : "Double Round Robin")[
-  + Order agents arbitarily
+  + Order agents arbitrarily
   + divide $Z = Z_g union Z_c$ where $Z_g$ is goods and $Z_c$ is chores
   + Forever:
     +  for $i in [n]$:
@@ -1352,7 +1352,7 @@ We will now also discuss another algorithm which works when valuations are not a
 
 Consider 2 agents with valuations over $A, B, C, D, E$ as $5,4,3,2,1$. By round robin, $1$ ends up with $A,C,E$ and $2$ with $B,D$. Setting valuations of ${A,C}, {C,E}$ and ${A,E}$ to be higher than ${B,D}$ is easy.
 
-Someone may sugest choosing the best thing to add. Constructing a counterexample for that using the same idea is not hard.
+Someone may suggest choosing the best thing to add. Constructing a counterexample for that using the same idea is not hard.
 
 So what do we do now?
 
@@ -1376,11 +1376,11 @@ incoming edges.]
     + Resolve cycles until a source vertex shows up
 ]
 
-Resolving a cycle here is just moving a good from a person to another person till the cycle is not there. As we give out one good at a time, the envy at the end is all upto $1$ and hence, EF1 is achived.
+Resolving a cycle here is just moving a good from a person to another person till the cycle is not there. As we give out one good at a time, the envy at the end is all upto $1$ and hence, EF1 is achieved.
 
-It is easy to show that the number of edges strictly decrese after reduction. This implies we make atmost $O(n^2)$ cycle reductions. Thus, the algorithm is polytime.
+It is easy to show that the number of edges strictly decrease after reduction. This implies we make atmost $O(n^2)$ cycle reductions. Thus, the algorithm is polytime.
 
-=== Pareoto Optimality
+=== Pareto Optimality
 
 #definition(title: "Pareto")[
   An allocation $A succ B$ if
@@ -1393,10 +1393,10 @@ It is easy to show that the number of edges strictly decrese after reduction. Th
 #definition(title:"Pareto Optimal (PO)")[
   $A$ is Pareto optimal if there is no $B$ such that $B succ A$.
 
-  Basically, $A$ is PO if you cannot make some agents better off without making enyone worse off.
+  Basically, $A$ is PO if you cannot make some agents better off without making anyone worse off.
 ]
 
-Note, PO always exists and the proof if by the fact that giving everything to the same agent does achive that.
+Note, PO always exists and the proof if by the fact that giving everything to the same agent does achieve that.
 
 #definition(title: "Social Welfare")[
   Social welfare of allocation $A$ is
@@ -1442,7 +1442,7 @@ So does a EF1 + PO allocation even exist?
   $
 ]
 #definition(title: "Nash Optimal")[
-We say $A$ is Nash Optimal if it is the largest set of agents $S$ who can simultaneously get positive values and take such a division which maximizes the geometric mean amoung $S$.
+We say $A$ is Nash Optimal if it is the largest set of agents $S$ who can simultaneously get positive values and take such a division which maximizes the geometric mean among $S$.
 ]
 
 Working in an instance where $m >= n$ where $forall i in [n], forall g, v_i (g) > 0$.
@@ -1453,7 +1453,7 @@ Working in an instance where $m >= n$ where $forall i in [n], forall g, v_i (g) 
   + $A$ is EF1
 ]
 #proof(title:"Proof of (1).")[
-Suppose not. Say $B succ A$ then the set of people with non-zero utility in $B$, say $S' supset.eq S$ which is the set of peple with non zero utility in $A$. Thus,
+Suppose not. Say $B succ A$ then the set of people with non-zero utility in $B$, say $S' supset.eq S$ which is the set of people with non zero utility in $A$. Thus,
 $
 op("NSW")(B) = product_(i in S') v_i (B_i) > product_(i in S) v_i (B_i)  >= product_(i in S) v_i (A_i)
 $
@@ -1471,7 +1471,7 @@ which is a contradiction.
   g^* = arg min_(g in A_k\ v_i (g) > 0) (v_k (g))/(v_i (g))
   $
 
-  Construct a new allocation whith everything same but $v_i (B_i) = v_i (A_i) + v_i (g^*)$ and $v_j (B_j) = v_j (A_j) - v_j (g^*)$.
+  Construct a new allocation which everything same but $v_i (B_i) = v_i (A_i) + v_i (g^*)$ and $v_j (B_j) = v_j (A_j) - v_j (g^*)$.
 
   We claim
 
@@ -1507,7 +1507,7 @@ which is a contradiction.
   leading to a contradiction and completing the proof.
 ]
 
-While NSWO is gurenteed to exist, it is NP hard to find and even hard to approximate. The question if EF1+PO can be done in poly time is open.
+While NSWO is guaranteed to exist, it is NP hard to find and even hard to approximate. The question if EF1+PO can be done in poly time is open.
 
 = Interlude: Mechanism Design
 #definition(title:"Mechanism Design")[
@@ -1518,9 +1518,9 @@ While NSWO is gurenteed to exist, it is NP hard to find and even hard to approxi
 #example()[
   In making a cricket tournament, we don't want players to lose on purpose to get an easier opponent later and have better medal odds.
 
-  A faliure of this was the 2012 London Olympics where the women's badminton doubles was structured so badly that both teams were trying to lose in an extremely hard to watch match. Search "Wang Xiaoli / Yu Yang (CHN) vs Ha Jung-eun / Kim Min-jung (KOR)" if you want to see the match, the refree being tense and the crowd booing.
+  A failure of this was the 2012 London Olympics where the women's badminton doubles was structured so badly that both teams were trying to lose in an extremely hard to watch match. Search "Wang Xiaoli / Yu Yang (CHN) vs Ha Jung-eun / Kim Min-jung (KOR)" if you want to see the match, the referee being tense and the crowd booing.
 
-  They were later disqualified for unsportsperson like behavior. Although, trying to win by all legal means is sportsperson like in my book. Maybe they should have set the tournament better to never let this be incetivized in the first place.
+  They were later disqualified for unsportsperson like behavior. Although, trying to win by all legal means is sportsperson like in my book. Maybe they should have set the tournament better to never let this be incentivized in the first place.
   ]
 
 Mechanism design is used to design tournaments, voting schemes and schemes to divide stuff.
@@ -1547,7 +1547,7 @@ There is an obvious choice of $(2)$ being letting the highest bidder have the go
 
 We can implement $(3)$ as:
 - *First Price Auction* Winner pays their bid
-- *Second Price Auctio* Winner pays the next highest bid
+- *Second Price Auction* Winner pays the next highest bid
 
 #solution(title:"Reasoning About Auctions")[
   The following is taken from Pollak's notes on Game Theory.
@@ -1558,34 +1558,34 @@ We can implement $(3)$ as:
 
   Bidding below this amount is not optimal as say if you bid $y - epsilon$ where $y$ is the bid as if you know you win bid; then if an agent bids $y - epsilon/2$ and wins; the agent could be better off bidding $y - epsilon/2 + tilde(epsilon)$.
 
-  This implies that it is weakly dominent to bid one's valuation in a second price auction as the payoff function is $0$ if you are not the highest bidder and $v_i - b_((2))$ otherwise.
+  This implies that it is weakly dominant to bid one's valuation in a second price auction as the payoff function is $0$ if you are not the highest bidder and $v_i - b_((2))$ otherwise.
 
-  Similerly, bidding your value is weakly dominated in First Price Auction as the valuation function is $0$ if you are not the highest bidder and $v_i - b_(i)$ otherwise.
+  Similarly, bidding your value is weakly dominated in First Price Auction as the valuation function is $0$ if you are not the highest bidder and $v_i - b_(i)$ otherwise.
 ]
 #definition(title: "Awesome Auctions")[
- We want an auction to have the following propoerties
-- *Dominent Stratergy Incentive Compatible (DSIC)*: Truthful bidding must be a dominant stratergy.
-- *Strong Performence Guarentee*: Maximize $sum x_i v_i$ or social surplus where $x_i$ is $1$ if $i$ wins and $0$ if $i$ loses, subject to the obvious feasibility constraint that $sum_(i=1)^n x_i <= 1$ as we have only one item.
-- *Polytime Computablity*
+ We want an auction to have the following properties
+- *Dominant Strategy Incentive Compatible (DSIC)*: Truthful bidding must be a dominant stratergy.
+- *Strong Performance Guarantee*: Maximize $sum x_i v_i$ or social surplus where $x_i$ is $1$ if $i$ wins and $0$ if $i$ loses, subject to the obvious feasibility constraint that $sum_(i=1)^n x_i <= 1$ as we have only one item.
+- *Polyline Computability*
 ]
-An awesome auction is clearly desireable as truthful bidding is a dominant stratergy, the auction gurentees that the item will go to the agents who value it the most and the auction can be decided before the heat-death of the universe.
+An awesome auction is clearly desirable as truthful bidding is a dominant strategy, the auction guarantees that the item will go to the agents who value it the most and the auction can be decided before the heat-death of the universe.
 #claim[
   Second Price Auction is awesome.
 ]
-== Sponsered Search Auction
-Perhaps the most profitiable auction of all time. In 2014, it made around 98% of google's revenue#footnote[You know, back when it was search engine and advertisment company and not an AI obssesed mega corporation burning money left and right].
+== Sponsored Search Auction
+Perhaps the most profitable auction of all time. In 2014, it made around 98% of google's revenue#footnote[You know, back when it was search engine and advertisement company and not an AI obsessed mega corporation burning money left and right].
 
-Similarly, not having a good sponsered search auction was one of the reasons behind the downfall of Yahoo.
-#definition(title:"Sponsered Search Auction")[
+Similarly, not having a good sponsored search auction was one of the reasons behind the downfall of Yahoo.
+#definition(title:"Sponsored Search Auction")[
 Given $k$ add slots and and agents $j in [n]$ with per click value of $v_j$ of the agents. Assuming the click through rate of these slots is $alpha_i, i in k$. Thus, if agent $i$ gets slot $j$ then the value obtained is $alpha_j v_i_j$.
 
-An auction to alot thee $k$ slots to $n$ agent is called an sponsered search auction.
+An auction to allot thee $k$ slots to $n$ agent is called an sponsored search auction.
 ]
-#prob[Can we design an awesome sponsered search auction?]
+#prob[Can we design an awesome sponsored search auction?]
 #solution[
 *Step 1* Assume that all agents bid their true values and choose an allocation rule that maximizes the social surplus and runs in polytime.
 
-*Step 2* Design a payment rule that makes truthfulnes dominent.
+*Step 2* Design a payment rule that makes truthfulness dominant.
 
 *Step 3* Profit!
 ]
@@ -1653,7 +1653,7 @@ Adding them will give us the inequality.
 == Myerson's Lemma
 Let's define everything formally
 #definition(title: "Auction")[
-  $n$ agents, one seller. Private valuations $v_i, i in [n]$. $X$ is the set of feasible aloocations of the items.
+  $n$ agents, one seller. Private valuations $v_i, i in [n]$. $X$ is the set of feasible allocations of the items.
 
   Allocation and payment rules are:
   + Collect bids $b_i, i in [n]$ as input
@@ -1675,12 +1675,12 @@ Let's define everything formally
 ]
 #definition(title : "Awesome Auctions?")[
 We want an auction to have the following propoerties
-- *Dominent Stratergy Incentive Compatible (DSIC)*: Truthful bidding must be a dominant stratergy.
-- *Strong Performence Guarentee*: Maximize $sum x_i v_i$ or social surplus.
-- Polytime Computablity
+- *Dominant Strategy Incentive Compatible (DSIC)*: Truthful bidding must be a dominant stratergy.
+- *Strong Performance Guarantee*: Maximize $sum x_i v_i$ or social surplus.
+- Polytime Computability
 ]#footnote[I am not sure if this is the real term for this. Will check at some point.]
 
-#definition(title : "Sponsered Search Auctions")[
+#definition(title : "Sponsored Search Auctions")[
 $n$ agents, $k$ slots, $i^("th")$ slot has click through rate $alpha_i$ where $alpha_1 >= dots >= alpha_k$ and valuations $v_j$. Agent $j$ derives value $alpha_i v_j$ if $i^("th")$ slot is allocated to $j$.
 
 We want to choose allocation and pricing rules.
@@ -1735,10 +1735,10 @@ We want to choose allocation and pricing rules.
 
     $
     therefore "Price at" y_l "when there are" l "jumps" y_1, y_2, dots, y_l\
-    = sum_(i=1)^l y_i ("jump heignt at" y_i "in" x_i)
+    = sum_(i=1)^l y_i ("jump height at" y_i "in" x_i)
     $
 
-    (iii) When $x$ is diffrentiable
+    (iii) When $x$ is differentiable
     $
     lim_(z -> y) y(x_i (z) - x_i (y))/(z-y) <= lim_(z -> y) (p_i (z) - p_i (y))/(z-y) <= lim_(z -> y) (z (x_i - x_i (y)))/(z-y)\
     => y x'_i (y) <= p'_i (y) <= y x'_i (y)\
@@ -1752,40 +1752,40 @@ We want to choose allocation and pricing rules.
 #definition[
   Seller's Capacity: $W$
 
-  Buyer $i$ has requitement $w_i$.
+  Buyer $i$ has requirement $w_i$.
 
-  Goal: Allocate $x_i$ ammount to buyer $i in [n]$ such that $sum_(i=1)^n w_i x_i <= W$ where $x_i in {0,1}$.
+  Goal: Allocate $x_i$ amount to buyer $i in [n]$ such that $sum_(i=1)^n w_i x_i <= W$ where $x_i in {0,1}$.
 ]
 The issue with using our normal strategy is welfare maximization (assuming truthful bidding) maximize $sum_(i=1)^n x_i b_i$.
 
-This is NP Hard as this is litrally the Knapsack problem which is NP Hard!
+This is NP Hard as this is literally the Knapsack problem which is NP Hard!
 
-*Can we modify the existing approximation algorithm to be monotone, retaining the approximation gurentee?* From [Chawla, Immorlica, Lucier 2012], it is not true in genral. As in we can't do a black box reduction that is we need to know about the instance and can't do so in a general way.
+*Can we modify the existing approximation algorithm to be monotone, retaining the approximation gurentee?* From [Chawla, Immorlica, Lucier 2012], it is not true in general. As in we can't do a black box reduction that is we need to know about the instance and can't do so in a general way.
 
-*Can there be a dominant stratergy that is different from truthful bidding?* 
+*Can there be a dominant strategy that is different from truthful bidding?* 
 #definition(title: "Revelation Principle")[
-  For any mechanism $M$ which always has a dominent stratergy, then there is a mechanism $M'$ such that truthful bidding is dominant stratergy for $M'$.
+  For any mechanism $M$ which always has a dominant strategy, then there is a mechanism $M'$ such that truthful bidding is dominant strategy for $M'$.
 ]
 #example(title: "'Silly' example")[
   Single item auction where seller runs a second price auction of bids $2 b_i$ when agents submit $b_i, i in [n]$. (Note, the agents bid say $b_1 > b_2 > dots$ then agent $i$ pays $2b_2$).
 
-  Here dominant stratergy is $b_i = v_i / 2$.
+  Here dominant strategy is $b_i = v_i / 2$.
 ]
 #proof[
   Notice $b_i$ is always a function of $v_i$.
 
-  For $M$, let the dominent strategy be $b_i = f_i (v_i)$.
+  For $M$, let the dominant strategy be $b_i = f_i (v_i)$.
 
-  Let $M'$ be a mechanism which takes ${b_i}$ as inputs and runs mechanism $M$ on $f_i (B_i)$. Thus, dominant stratergy for $M'$ is $b_i = v_i$.
+  Let $M'$ be a mechanism which takes ${b_i}$ as inputs and runs mechanism $M$ on $f_i (B_i)$. Thus, dominant strategy for $M'$ is $b_i = v_i$.
 ]
 
-This implies DSIC is free if we can design a mechanism with dominant stratergy.
+This implies DSIC is free if we can design a mechanism with dominant strategy.
 
 == Revenue Maximization
 #example[
-One Agent, one item. The agent valeus it $v$ which is private.
+One Agent, one item. The agent values it $v$ which is private.
 ]
-This general case is not solvalble. So we assume $v$ is drawn from a known probability distribution.
+This general case is not solvable. So we assume $v$ is drawn from a known probability distribution.
 #exercise[
   Let's say seller's price is drawn from $v tilde "Uniform"[0,1]$ and seller sets the price to $r$. What $r$ maximizes revenue?
 ]
@@ -1813,11 +1813,11 @@ Let $v_1, v_2 tilde "Uniform"[0,1]$. What is expected revenue in a second price 
   Thus, $
   EE("revenue") = 0 * R * R + R * 2 * (R * (1-R)) + (1-R)*(1-R) * EE(min(v_1, v_2) | v_1, v_2 > R)\
   = 0 R^2 + 2 R^2 (1-R) + (1-R)^2 EE(min(v_1, v_2) | v_1, v_2 > R)\
-  = 2 R^2 (1-R) + (1-R)^2 (R + EE(min(u_1, u_2)) quad "where" u_1, u_2 tilde "unifomr"[0,1-R]\
+  = 2 R^2 (1-R) + (1-R)^2 (R + EE(min(u_1, u_2)) quad "where" u_1, u_2 tilde "uniform"[0,1-R]\
   = 2 R^2 (1-R) + (1-R)^2 (R + (1-R)/3)\
   = 2 R^2 (1-R) + ((1-R)^2 (1+2R))/3
   $
-  This achives maxima at $R = 1/2$.
+  This achieves maxima at $R = 1/2$.
 ]
 #exercise[
 Let $v_1, v_2, dots, v_n  tilde "Uniform"[0,1]$. What is expected revenue in a second price auction with reserve price $R$ (we don't sell below $R$)?]
@@ -1843,7 +1843,7 @@ We use the order statistics notation.
   EE("revenue") = n(n-1) [1/n - 1/(n+1) - 1/(2^n n) + 1/(2^(n+1) (n+1))] + n/2^(n+1)
   $
 
-And maximizing exoected revenue, we diffrentiate and set to 0
+And maximizing expected revenue, we differentiate and set to 0
 $
 n (n-1) [- R^(n-1) + R^n] + n^2 R^(n-1)(1-R) - n R^n = 0\
 => n (n-1) [R - 1] + n^2 (1-R) - n R = 0\
@@ -1855,12 +1855,12 @@ $
 Thus, the revenue is maximized at $R = 1/2$.
 ]
 
-== Revenue Maximizingin Auctions
-Single parameter environments where each agent has a private valuatuion $v_i$ and $X$ is a set of feasible allocations.
+== Revenue Maximizing Auctions
+Single parameter environments where each agent has a private valuation $v_i$ and $X$ is a set of feasible allocations.
 
 *Our model* Single parameter environment where $v_i$'s are drawn form distributions $F_i, f_i$ which are independent and supported on $[0, v_(max)]$.
 
-The goal is to design a DSIC aiction $(X, p)$ that maximizes the expected revenue.
+The goal is to design a DSIC auction $(X, p)$ that maximizes the expected revenue.
 
 Seller knows $F_i forall i in [n]$, $v_i$'s are private to the agents.
 
@@ -1937,7 +1937,7 @@ Notice, $phi_i (z) <= 0$ for $z <= 1/2$. This implies that if all the virtual pr
   $
   where $h$ is called the hazard rate of the distribution. 
   
-  Regular functions are characterised by the strict convexity of $1/(1 − F(x))$ for the distribution (given we can differentiate, this is easy to prove given someone, somehow makes this hypothesis). Details on the characterisation if smoothness assumption is not made can be found in #link("https://doi.org/10.1007/s00199-012-0705-3.")[Ewerhart, 2012].
+  Regular functions are characterized by the strict convexity of $1/(1 − F(x))$ for the distribution (given we can differentiate, this is easy to prove given someone, somehow makes this hypothesis). Details on the characterization if smoothness assumption is not made can be found in #link("https://doi.org/10.1007/s00199-012-0705-3.")[Ewerhart, 2012].
 
 It uses weird probability theory things like Dini Derivative and Prekopa-Borel theorem etc which is way beyond the amount of math I know.
 ]
@@ -1954,18 +1954,18 @@ It uses weird probability theory things like Dini Derivative and Prekopa-Borel t
 #definition(title : "Blocking Pair")[
   $(a,b)$ is a blocking pair for matching $M$ if $a$ prefers $b$ over $M(a)$ and $b$ prefers $a$ over $M(b)$ as per $Pi_a$ and $Pi_b$.
 ]
-A simple greedy algorithm for this is the deferred acceptence algorithm.
-#algo(title: "Deferred Acceptence or Gale-Sharpley")[
+A simple greedy algorithm for this is the deferred acceptance algorithm.
+#algo(title: "Deferred Acceptance or Gale-Sharply")[
   Each round: 
 1. Boys who are without a provisional match propose to the their top girl who is yet to reject them 
-2. Each Girl rejects all but the favourite offer received that round + her provisional match.
+2. Each Girl rejects all but the favorite offer received that round + her provisional match.
 3. Each Boy crosses off the rejecting girls from their list.
 4. Repeat till everyone has a provisional match. These are final matches.
 ]
-#psudo(title: "Deferred Acceptence or Gale-Shapley")[
+#psudo(title: "Deferred Acceptance or Gale-Shapley")[
   + $M = emptyset$
   + while ($exists$ an unmatched $a in A$ who has not yet proposed to some $b in B$)"
-    + $a$ proposes to their most prefered $b in B$ as per $Pi_a$
+    + $a$ proposes to their most preferred $b in B$ as per $Pi_a$
       + if $b$ is not matched:
         + $b$ accepts $a$, $M."insert"((a,b))$
       + else:
@@ -1975,7 +1975,7 @@ A simple greedy algorithm for this is the deferred acceptence algorithm.
         + else:
           + $b$ rejects $a$
 ]
-Proving the termination of the algorithm is trivial as all agents prefer being matched then unmatched and no prposal is made twice. This also gurentees execution in $O(n^2)$ time. The proof of correctness follows as:
+Proving the termination of the algorithm is trivial as all agents prefer being matched then unmatched and no proposal is made twice. This also guarantees execution in $O(n^2)$ time. The proof of correctness follows as:
 #proof(title: "Proof of Correctness:")[
   #lem[
   For all women, their provisional match in round $t + 1$ is better or equal to match in round $t$. 
@@ -2020,7 +2020,7 @@ Proving the termination of the algorithm is trivial as all agents prefer being m
 
 Bu the lemma, no stable partner rejects in DA. Thus, output of DA is such that every $a in A$ hus best possible stable partner.
 ]
-A similer proof will show:
+A similar proof will show:
 #thm[
   The output $M$ of DA simultaneously is such that $b in B$ has the worst possible stable partner.
 ]
@@ -2045,16 +2045,16 @@ A similer proof will show:
 
 Let's now talk about the mechanism design aspects of this algorithm
 #thm[
-  DA is truthful for the proposing side by not for the reciving side.
+  DA is truthful for the proposing side by not for the receiving side.
 ]
 #proof[
   Suppose $a in A$ submits a false list and get's a better partner.
 
-  Let $M$ be the DA matching with true lists and $M'$ be the DA output with $A$ falsifing the list and $M'(a) = b' succ_a b =  M(a)$.
+  Let $M$ be the DA matching with true lists and $M'$ be the DA output with $A$ falsifying the list and $M'(a) = b' succ_a b =  M(a)$.
 
   Let $M(b') = a'$. This means $M'(a') succ_(a') M(a')$ as otherwise $(a',b')$ block $M'$.
 
-  Similerly now, $M(M'(a'))$ will get a better partner and so on. But, we can't repeat $b$ at any point as that would contradict $M$'s stability by the no stable partner rejection lemma.
+  Similarly now, $M(M'(a'))$ will get a better partner and so on. But, we can't repeat $b$ at any point as that would contradict $M$'s stability by the no stable partner rejection lemma.
 
   But as the sets are finite, this leads to a contradiction.
 
@@ -2065,10 +2065,10 @@ Let's now talk about the mechanism design aspects of this algorithm
 #remark[
   The socially maximal matching is NP complete to find via a reduction from Quadratic Programming.
 
-  However, Quadratic programming is solvable by Quantumn Computers in poly-time; hence, we can solve socially maximal matching on a Quantumn computer. It's implemtation (named MIT-Qute, to be prononunced Meet Cute) in Quiskit came in second at MIT's Quantumn Hackethon. You can see it #link("https://www.eecs.mit.edu/at-the-mit-quantum-hackathon-a-community-tackles-quantum-computing-challenges/")[here].
+  However, Quadratic programming is solvable by Quantum Computers in poly-time; hence, we can solve socially maximal matching on a Quantum computer. It's implementation (named MIT-Qute, to be pronounced Meet Cute) in Quiskit came in second at MIT's Quantum Hackethon. You can see it #link("https://www.eecs.mit.edu/at-the-mit-quantum-hackathon-a-community-tackles-quantum-computing-challenges/")[here].
 ]
 #remark[
-  This genralizes to Stable Roomates problem. An $O(n^2)$ algorithm for it exists and was given by Robert Irving. I had implemented it in Haskell (in $O(n^2 log(n))$ to prevent use of Hash maps. With hash maps, it is $O(n^2)$) and the code can be found 
+  This generalizes to Stable Roommates problem. An $O(n^2)$ algorithm for it exists and was given by Robert Irving. I had implemented it in Haskell (in $O(n^2 log(n))$ to prevent use of Hash maps. With hash maps, it is $O(n^2)$) and the code can be found 
 ]
 
 For more data in this regard, check out Grusfield and Irving's "Stable Matching: Structure and Algorithms".
@@ -2093,7 +2093,7 @@ Here, as $Pi = h_b, h_c, h_a$ is not gonna work as $a,b$ can make a blocking coa
 ]
 
 #definition(title: "Stable Allocation")[
-  $Pi$ is stable if there is no blocking colaition with respect to $Pi$
+  $Pi$ is stable if there is no blocking coalition with respect to $Pi$
 ]
 #definition(title: "Blocking Coalition")[
   Given $Pi$, if there i a subset of agents $A subset.eq N$ such that $exists sigma : A -> A$ such that $forall i in A, sigma_i succ.eq Pi_i$ and $exists i in A, sigma_i succ Pi_i$.
@@ -2101,7 +2101,7 @@ Here, as $Pi = h_b, h_c, h_a$ is not gonna work as $a,b$ can make a blocking coa
 #psudo(title: "Top Trading Cycle Algorithm")[
 + N' = N
 + while $N' != emptyset$
-  + Construct a graph where $(i,j) in E <==> h_j$ is $i's$ most favorite house amoung $j in N'$.
+  + Construct a graph where $(i,j) in E <==> h_j$ is $i's$ most favorite house among $j in N'$.
   + If $exists$ a cycle $C = angle.l i_1, dots, i_k angle.r$:
     + perform an exchange $Pi_(i_1) = h_(i_2), dots, Pi_(i_k) = h_(i_1)$
     + Delete $i_1, dots, i_k$ from $N$.
@@ -2116,9 +2116,9 @@ complexity.
   $Pi$ is a stable allocation
 ]
 #proof[
-  FTSOC let $Pi$, outputed by TTC is unstable. Thus, $exists A subset.eq N$ and $sigma : A -> A$ such that $forall i in A, sigma_i >= Pi_i$ and $exists i in A, sigma_i > Pi_i$.
+  FTSOC let $Pi$, outputted by TTC is unstable. Thus, $exists A subset.eq N$ and $sigma : A -> A$ such that $forall i in A, sigma_i >= Pi_i$ and $exists i in A, sigma_i > Pi_i$.
 
-  We begin by partitioning the agents into itterations based on the round they were alloted their house.
+  We begin by partitioning the agents into iterations based on the round they were alloted their house.
   $
   N_1 : "Agents that get house in round 1"\
   N_2 : "Agents that get house in round 2"\
@@ -2146,13 +2146,13 @@ complexity.
   $Pi$ is unique stable allocation.
 ]
 #proof[
-  #idea[Let $Pi'$ be another stable allocation. We can get this by inducting on the number of itterations. If $Pi, Pi'$ are same upto to $t$ itterations, it will be same in $t+1$.]
+  #idea[Let $Pi'$ be another stable allocation. We can get this by inducting on the number of iterations. If $Pi, Pi'$ are same upto to $t$ iterations, it will be same in $t+1$.]
 ]
-#definition(title: "Stratergyproof")[
-  By Stratergyproofness, here we mean that no agent can get a better house in $Pi$ by submitting a false list.
+#definition(title: "Strategyproof")[
+  By Strategyproofness, here we mean that no agent can get a better house in $Pi$ by submitting a false list.
 ]
 #thm[
-  The TTC algorithm is stratergyproof.
+  The TTC algorithm is strategyproofness.
 ]
 #proof[
   An agent can put a false preference, putting up a false outgoing edge but not a false incoming edge. Hence, they can't get anything better in an earlier round and thus, can't get better by lying.
@@ -2161,28 +2161,28 @@ This makes the algorithm quite robust, despite being simple.
 #remark[
   The problem has been studied in a number of settings.
   - Envyfreeness : Defining envy as $i arrow_"envy" j$ if $Pi_i prec_i Pi_j$, can we allocate in an envy free fashion?
-  - Popular: An allocatation $Pi$ is popular, if for any other allocatation $sigma$, atleast $50%$ agents prefer $Pi$ over $sigma$.
+  - Popular: An allocation $Pi$ is popular, if for any other allocation $sigma$, atleast $50%$ agents prefer $Pi$ over $sigma$.
 ]
 == Kidney Exchange
 #prob[
-  There are paitients who need kidney transplant and there are doners willing to donate a kidney.
+  There are patients who need kidney transplant and there are donors willing to donate a kidney.
 
-  However, patient-donor pairs may be incompatible. In that case, sometimes we can exchange donors to get compatible donations. We also don't want huge cycles as some donor once their paitient recives a donation, they can walk out.
+  However, patient-donor pairs may be incompatible. In that case, sometimes we can exchange donors to get compatible donations. We also don't want huge cycles as some donor once their patient receives a donation, they can walk out.
 ]
 The last condition is there as a hospital can do only a number of transplants at once. The threshold we will see is $2$ as taking $3$ makes the problem NP hard (although approximation algorithms exist).
 
 #solution(title: "Possible Solution 1")[
-  Treat paitrnts as agents, donors as houses and use TTC.
+  Treat patients as agents, donors as houses and use TTC.
 ]
 This solution fails due to the walk out risk, making large cycles impractical. Second, preferences are binary and not a total order#footnote[In biology, we actually could have a total order. We can use the tissue match percentage or edit distance on the DNA etc.].
 
-Notice, we can't just do the maximal bipartaite matching as $d_1 -> p_2 => d_2 -> p_1$ so that alogorithm doesn't work as is.
+Notice, we can't just do the maximal bipartite matching as $d_1 -> p_2 => d_2 -> p_1$ so that algorithm doesn't work as is.
 
 #solution[
   We make a graph $G = (V,E); V = {(p_i, d_i) | i in [n]}, E = {(i,j) | d_i -> p_j, d_j -> p_i}$.
 
-  We want to find a maximum matching in $G$. We define a priority order on paitients $1, dots, n$.#footnote[This may sound unethical but
-  + Some paitients have less surviaval odds if they don't get kidney fast enough.
+  We want to find a maximum matching in $G$. We define a priority order on patients $1, dots, n$.#footnote[This may sound unethical but
+  + Some patients have less survival odds if they don't get kidney fast enough.
   + We might have multiple maximum matchings in $G$ and have to choose $1$ in an unbiased/truthful fashion.
   ]
   #psudo(title: "Kidney Matching")[
@@ -2193,7 +2193,7 @@ Notice, we can't just do the maximal bipartaite matching as $d_1 -> p_2 => d_2 -
         + $M_i = z_i$
       + else
         + $M_i = M_(i-1)$
-    + output an arbitary matching from $M_n$
+    + output an arbitrary matching from $M_n$
   ]
 ]
 #claim[
@@ -2201,9 +2201,9 @@ Notice, we can't just do the maximal bipartaite matching as $d_1 -> p_2 => d_2 -
 ]
 The proof follows from the above mechanism being truthful that is no agent has incentive to not declare a matching.
 #remark[
-Three way exhanges are practical but finding maximum number of disjoint 3-cycles is NP-complete.
+Three way exchanges are practical but finding maximum number of disjoint 3-cycles is NP-complete.
 
-Emprirical results show that $4$ and larger cycles don't drastically improve the number of exhanges or people getting kidneys.
+Empirical results show that $4$ and larger cycles don't drastically improve the number of exchanges or people getting kidneys.
 ]
 === Truthfulness by Hospitals
 Consider the case
@@ -2217,7 +2217,7 @@ Consider the case
 ),
 layout:layout.grid.with(columns: 2, spacing: 2)
 )
-In this case, if hospital $1$ has paitient $1,2,3$ and hospital $2$ has paitients $4,5,6$; then there is incentive to perform $1 <-> 2$ and $5 <-> 6$ which will sevearely undermine the system!
+In this case, if hospital $1$ has patient $1,2,3$ and hospital $2$ has patients $4,5,6$; then there is incentive to perform $1 <-> 2$ and $5 <-> 6$ which will severely undermine the system!
 
 #automaton((
   "1":("4":"", "2":""),
@@ -2232,9 +2232,9 @@ In this case, if hospital $1$ has paitient $1,2,3$ and hospital $2$ has paitient
 layout:layout.grid.with(columns: 3, spacing: 2)
 )
 
-Similerly in this case, Hospital $1$ has an incentive to not reprort $(1,2)$ so that $3$ always gets matched.
+Similarly in this case, Hospital $1$ has an incentive to not report $(1,2)$ so that $3$ always gets matched.
 
-== Matching Markets#footnote[Yay!]
+== Matching Markets
 #definition(title:"Popular Matching")[
   Given agents and items where agents have an ordering on items (possibly incomplete). Given matching $M_1$ and $M_2$, $M_1$ is more popular than $M_2$ if more agents prefer $M_1$ over $M_2$.
 
@@ -2244,7 +2244,7 @@ Similerly in this case, Hospital $1$ has an incentive to not reprort $(1,2)$ so 
 
 We want to find a matching $M$ such that $exists.not n in cal(M)$ more popular than $M$.
 
-Notice, this is not gurenteed to exist as
+Notice, this is not guaranteed to exist as
 $
 mat(
   a_1 : b_1, b_2, b_3;
@@ -2254,7 +2254,7 @@ mat(
 $
 Notice, $(b_1, b_2, b_3) prec (b_3, b_1, b_2) prec (b_2, b_3, b_1) prec (b_1, b_2, b_3)$ and we have a cycle. In this case, we don't have a popular matching.
 
-The following set of claims to some extent will provide a characterisation of popular matching.
+The following set of claims to some extent will provide a characterization of popular matching.
 
 #claim[
   A popular matching has to maximum on top-choice edges
@@ -2262,19 +2262,19 @@ The following set of claims to some extent will provide a characterisation of po
 #proof[
   FTSOC, let there be a popular matching that is not maximum on the top-choice edges.
 
-  That means $exists a_i, a_j, g_i, g_j$ such that $a_i$'s first choice is $g_i$ and $a_j$'s first chocie is $g_j$ but $a_i -> g_j$ and $a_j -> g_k$ and some $a_k -> g_i$. 
+  That means $exists a_i, a_j, g_i, g_j$ such that $a_i$'s first choice is $g_i$ and $a_j$'s first choice is $g_j$ but $a_i -> g_j$ and $a_j -> g_k$ and some $a_k -> g_i$. 
   
   In this case, we can match $a_i -> g_i$ and $a_j -> g_j$ and $a_k -> g_k$ which atmost degrades $1$ agent while making $2$ agents better.
 
   Thus, this can't be popular and hence, we have a contradiction!
 ]
-Notice, the converse is not neccesarily true.
+Notice, the converse is not necessarily true.
 #claim[
   For every $a$, adding $l(a)$ the last choice of $a$ for consistency (is last is $a$'s preference but is on the list. Is on nobody else's list);
 
-  If we let $f(a)$ be the first choice of $a$ and $s(a)$ be the first choice amoung those items which are nobody's first choice then:
+  If we let $f(a)$ be the first choice of $a$ and $s(a)$ be the first choice among those items which are nobody's first choice then:
 
-  A popular matching must matchess each agent to either $f(a)$ and $s(a)$.
+  A popular matching must matches each agent to either $f(a)$ and $s(a)$.
 ]
 #proof[
   FTSOC, let there be a popular matching that has some agent $a$ matched to neither $f(a)$ or $s(a)$.
@@ -2301,8 +2301,8 @@ Notice, the converse is not neccesarily true.
 
 Notice, the algorithm runs in $O(m + n)$ time.
 
-== Stratigic Concerns
-Notice, our algo is not stratergyproof!
+== Strategic Concerns
+Notice, our algo is not strategyproof!
 #example(title:"Perfect Matching is not Strategyproof")[
 Consider the true preferences
 $
@@ -2336,7 +2336,7 @@ The problems of manipulation by a coalition is open#footnote[Was in the 2013 pap
 ]
 == Perfect Matching with double sided preferences
 #definition()[
-  Consider $G = (A union B, E)$, each $v in A union B$ has a preference ordering over its neighbours.
+  Consider $G = (A union B, E)$, each $v in A union B$ has a preference ordering over its neighbors.
 
   We want to find a popular matching in $G$
 ]
@@ -2369,7 +2369,7 @@ We will not get into the proof but here are a few interesting things.
 #thm[
   The algo gives a max size popular matching and it is $>= 2/3$ size of maximum matching.
 ]
-Intrestingly, giving 2 or more stars doesn't lead to popular matchings but leads to larger matchings who are popular in their size. This is a paper by Kavitha titled "A size popularity trade off in the stable marriage setting" in 2015.
+Interestingly, giving 2 or more stars doesn't lead to popular matchings but leads to larger matchings who are popular in their size. This is a paper by Kavitha titled "A size popularity trade off in the stable marriage setting" in 2015.
 
 This algorithm is quite general and hence, can be extended to a lot of cases. For example, we can use it in matching kids to collages.
 
